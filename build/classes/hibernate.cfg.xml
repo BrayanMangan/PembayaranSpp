@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/pembayaran_spp?zeroDateTimeBehavior=convertToNull</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.connection.pool_size">1</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+    <mapping class="com.yf.kp.model.TabelAgama"/>
+    <mapping class="com.yf.kp.model.TabelBayarBiayaTambahan"/>
+    <mapping class="com.yf.kp.model.TabelBayarSpp"/>
+    <mapping class="com.yf.kp.model.TabelBiayaTambahan"/>
+    <mapping class="com.yf.kp.model.TabelBulan"/>
+    <mapping class="com.yf.kp.model.TabelKelas"/>
+    <mapping class="com.yf.kp.model.TabelKonfig"/>
+    <mapping class="com.yf.kp.model.TabelPengguna"/>
+    <mapping class="com.yf.kp.model.TabelSiswa"/>
+    <mapping class="com.yf.kp.model.TabelSpp"/>
+    <mapping class="com.yf.kp.model.TabelWaliKelas"/>
+  </session-factory>
+</hibernate-configuration>
