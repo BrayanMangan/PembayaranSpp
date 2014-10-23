@@ -1,5 +1,6 @@
 package com.yf.kp.design;
 
+import com.yf.kp.design.siswa.FrameSiswa;
 import com.yf.kp.design.kelas.FrameKelas;
 import java.awt.Dimension;
 import java.awt.Image;

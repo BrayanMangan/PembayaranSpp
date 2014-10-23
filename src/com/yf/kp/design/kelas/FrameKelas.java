@@ -353,12 +353,9 @@ public class FrameKelas extends javax.swing.JInternalFrame {
                 loadData();
             }
         }
-
-
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
         if (tableKelas.getSelectedRow() != -1) {
             int index = tableKelas.convertRowIndexToModel(tableKelas.getSelectedRow());
             Kelas kelas = list.get(index);
