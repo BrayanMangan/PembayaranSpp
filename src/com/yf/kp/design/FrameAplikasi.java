@@ -1,5 +1,6 @@
 package com.yf.kp.design;
 
+import com.yf.kp.design.kelas.FrameKelas;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -22,7 +23,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
     public FrameAplikasi() {
         initComponents();
         setLocationRelativeTo(null);
-        fullScreen();
+        //fullScreen();
         setIcon();
     }
 
@@ -65,9 +66,9 @@ public class FrameAplikasi extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Aplikasi Pembayaran");
-        setMaximumSize(new java.awt.Dimension(1280, 768));
-        setMinimumSize(new java.awt.Dimension(1280, 768));
-        setPreferredSize(new java.awt.Dimension(1280, 768));
+        setMaximumSize(new java.awt.Dimension(1280, 720));
+        setMinimumSize(new java.awt.Dimension(1280, 720));
+        setPreferredSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -80,6 +81,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jButtonMenuDataSiswa.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         jButtonMenuDataSiswa.setText("DATA SISWA");
         jButtonMenuDataSiswa.setToolTipText("Login");
+        jButtonMenuDataSiswa.setPreferredSize(new java.awt.Dimension(150, 40));
         jButtonMenuDataSiswa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonMenuDataSiswaActionPerformed(evt);
@@ -89,6 +91,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jButtonMenuKelas.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         jButtonMenuKelas.setText("KELAS");
         jButtonMenuKelas.setToolTipText("Logout");
+        jButtonMenuKelas.setPreferredSize(new java.awt.Dimension(150, 40));
         jButtonMenuKelas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonMenuKelasActionPerformed(evt);
@@ -121,6 +124,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jButtonMenuJenisPembayaran.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         jButtonMenuJenisPembayaran.setText("JENIS PEMBAYARAN");
         jButtonMenuJenisPembayaran.setToolTipText("About");
+        jButtonMenuJenisPembayaran.setPreferredSize(new java.awt.Dimension(150, 40));
         jButtonMenuJenisPembayaran.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonMenuJenisPembayaranActionPerformed(evt);
@@ -130,6 +134,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jButtonMenuBilingPembayaran.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         jButtonMenuBilingPembayaran.setText("BILING PEMBAYARAN");
         jButtonMenuBilingPembayaran.setToolTipText("About");
+        jButtonMenuBilingPembayaran.setPreferredSize(new java.awt.Dimension(150, 40));
         jButtonMenuBilingPembayaran.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonMenuBilingPembayaranActionPerformed(evt);
@@ -142,10 +147,10 @@ public class FrameAplikasi extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButtonMenuJenisPembayaran)
+                .addComponent(jButtonMenuJenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
-                .addComponent(jButtonMenuBilingPembayaran)
-                .addContainerGap(508, Short.MAX_VALUE))
+                .addComponent(jButtonMenuBilingPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(448, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,7 +158,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButtonMenuJenisPembayaran, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonMenuBilingPembayaran, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
+                    .addComponent(jButtonMenuBilingPembayaran, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -244,6 +249,10 @@ public class FrameAplikasi extends javax.swing.JFrame {
 
     private void jButtonMenuKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuKelasActionPerformed
         // TODO add your handling code here:
+        FrameKelas fk = new FrameKelas();
+        fk.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
+        customDesktopPane1.add(fk);
+        fk.setVisible(true);
     }//GEN-LAST:event_jButtonMenuKelasActionPerformed
 
     private void jButtonMenuJenisPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuJenisPembayaranActionPerformed

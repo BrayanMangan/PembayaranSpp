@@ -1,6 +1,5 @@
 package com.yf.kp.utility;
 
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.cfg.AnnotationConfiguration;
@@ -8,11 +7,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 /**
- * Hibernate Utility class with a convenient method to get Session Factory object.
+ * Hibernate Utility class with a convenient method to get Session Factory
+ * object.
  *
  * @author BlackCode
  */
 public abstract class HibernateUtil {
+
     private static final SessionFactory sessionFactory;
     private Session sess;
     private Transaction tx;
@@ -32,31 +33,31 @@ public abstract class HibernateUtil {
     private static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
-    
-    protected Session manager(){
+
+    protected Session manager() {
         return this.sess;
     }
-    
-    protected void connect(){
+
+    protected void connect() {
         sess = getSessionFactory().getCurrentSession();
         tx = sess.getTransaction();
         tx.begin();
     }
-    
-    protected void commit(){
+
+    protected void commit() {
         tx = manager().getTransaction();
         tx.commit();
     }
-    
-    protected void rollback(){
+
+    protected void rollback() {
         tx = manager().getTransaction();
-        if(tx != null){
+        if (tx != null) {
             tx.rollback();
         }
     }
-    
-    protected void close(){
-        if(manager() != null && manager().isOpen()){
+
+    protected void close() {
+        if (manager() != null && manager().isOpen()) {
             manager().close();
         }
     }

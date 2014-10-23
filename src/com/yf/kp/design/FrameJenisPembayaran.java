@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.yf.kp.design;
 
 /**
@@ -11,6 +10,7 @@ package com.yf.kp.design;
  * @author aspire
  */
 public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
+
     private int noHalaman;
     private int totalHalaman;
 
@@ -21,6 +21,10 @@ public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
         initComponents();
     }
 
+    private void loadData() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,8 +33,8 @@ public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -50,6 +54,7 @@ public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
         jComboBoxJumlahBaris10 = new javax.swing.JComboBox();
         jButtonNext10 = new javax.swing.JButton();
         jButtonLast10 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         jButton22 = new javax.swing.JButton();
         jButton23 = new javax.swing.JButton();
         jButton24 = new javax.swing.JButton();
@@ -60,15 +65,19 @@ public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Cara Membayar");
 
-        jLabel3.setText("Jumalah");
+        jLabel3.setText("Jumlah");
 
+        buttonGroup1.add(jRadioButton1);
         jRadioButton1.setText("Angsur");
 
+        buttonGroup1.add(jRadioButton2);
         jRadioButton2.setText("Bulanan");
 
+        buttonGroup1.add(jRadioButton3);
         jRadioButton3.setText("Tunai");
 
         jButton1.setText("OK");
+        jButton1.setPreferredSize(new java.awt.Dimension(80, 30));
 
         jPanel23.setOpaque(false);
 
@@ -76,106 +85,66 @@ public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
         jScrollPane12.setViewportView(jTable11);
 
         jPanel24.setOpaque(false);
-        jPanel24.setLayout(new java.awt.GridBagLayout());
 
         jButtonFirst10.setText("<<");
         jButtonFirst10.setToolTipText("First");
+        jButtonFirst10.setPreferredSize(new java.awt.Dimension(50, 30));
         jButtonFirst10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonFirst10ActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 25, 0);
-        jPanel24.add(jButtonFirst10, gridBagConstraints);
+        jPanel24.add(jButtonFirst10);
 
         jButtonPrev10.setText("<");
         jButtonPrev10.setToolTipText("Prev");
+        jButtonPrev10.setPreferredSize(new java.awt.Dimension(50, 30));
         jButtonPrev10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPrev10ActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 25, 0);
-        jPanel24.add(jButtonPrev10, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(11, 6, 0, 0);
-        jPanel24.add(jComboBoxJumlahBaris10, gridBagConstraints);
+        jPanel24.add(jButtonPrev10);
+
+        jComboBoxJumlahBaris10.setPreferredSize(new java.awt.Dimension(50, 25));
+        jPanel24.add(jComboBoxJumlahBaris10);
 
         jButtonNext10.setText(">");
         jButtonNext10.setToolTipText("Next");
+        jButtonNext10.setPreferredSize(new java.awt.Dimension(50, 30));
         jButtonNext10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonNext10ActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(11, 6, 25, 0);
-        jPanel24.add(jButtonNext10, gridBagConstraints);
+        jPanel24.add(jButtonNext10);
 
         jButtonLast10.setText(">>");
         jButtonLast10.setToolTipText("Last");
+        jButtonLast10.setPreferredSize(new java.awt.Dimension(50, 30));
         jButtonLast10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonLast10ActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(11, 6, 25, 12);
-        jPanel24.add(jButtonLast10, gridBagConstraints);
+        jPanel24.add(jButtonLast10);
 
         javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
         jPanel23.setLayout(jPanel23Layout);
         jPanel23Layout.setHorizontalGroup(
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel23Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane12)
-                .addContainerGap())
-            .addGroup(jPanel23Layout.createSequentialGroup()
-                .addGap(192, 192, 192)
-                .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane12, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel23Layout.setVerticalGroup(
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel23Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-
-        jButton22.setText("Tambah");
-
-        jButton23.setText("Edit");
-
-        jButton24.setText("Hapus");
-
-        jButton25.setText("Refres");
-
-        jButton26.setText("Keluar");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -183,36 +152,41 @@ public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton22)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton23)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton24)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton25)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton26)
-                        .addGap(106, 106, 106)))
+                .addComponent(jPanel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton22)
-                    .addComponent(jButton23)
-                    .addComponent(jButton24)
-                    .addComponent(jButton25)
-                    .addComponent(jButton26))
-                .addGap(28, 28, 28)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jPanel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        jButton22.setText("Tambah");
+        jButton22.setPreferredSize(new java.awt.Dimension(80, 30));
+        jPanel2.add(jButton22);
+
+        jButton23.setText("Edit");
+        jButton23.setPreferredSize(new java.awt.Dimension(80, 30));
+        jPanel2.add(jButton23);
+
+        jButton24.setText("Hapus");
+        jButton24.setPreferredSize(new java.awt.Dimension(80, 30));
+        jPanel2.add(jButton24);
+
+        jButton25.setText("Refresh");
+        jButton25.setPreferredSize(new java.awt.Dimension(80, 30));
+        jPanel2.add(jButton25);
+
+        jButton26.setText("Keluar");
+        jButton26.setPreferredSize(new java.awt.Dimension(80, 30));
+        jButton26.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton26ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton26);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -226,22 +200,23 @@ public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(jTextField2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(61, 61, 61)
-                                .addComponent(jLabel2)
-                                .addGap(33, 33, 33)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jRadioButton2)
-                                    .addComponent(jRadioButton1)
-                                    .addComponent(jRadioButton3))))
-                        .addGap(0, 60, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jRadioButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+                            .addComponent(jRadioButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -254,14 +229,15 @@ public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2)
                     .addComponent(jRadioButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jRadioButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton3)
-                .addGap(5, 5, 5)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel3))
+                .addGap(24, 24, 24)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -278,7 +254,7 @@ public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
 
     private void jButtonPrev10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPrev10ActionPerformed
         // TODO add your handling code here:
-        if(noHalaman > 1){
+        if (noHalaman > 1) {
             noHalaman--;
             loadData();
         }
@@ -286,7 +262,7 @@ public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
 
     private void jButtonNext10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNext10ActionPerformed
         // TODO add your handling code here:
-        if(noHalaman < totalHalaman){
+        if (noHalaman < totalHalaman) {
             noHalaman++;
             loadData();
         }
@@ -298,165 +274,38 @@ public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
         loadData();
     }//GEN-LAST:event_jButtonLast10ActionPerformed
 
+    private void jButton26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton26ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton26ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton18;
-    private javax.swing.JButton jButton19;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton20;
-    private javax.swing.JButton jButton21;
     private javax.swing.JButton jButton22;
     private javax.swing.JButton jButton23;
     private javax.swing.JButton jButton24;
     private javax.swing.JButton jButton25;
     private javax.swing.JButton jButton26;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
-    private javax.swing.JButton jButtonFirst;
-    private javax.swing.JButton jButtonFirst1;
     private javax.swing.JButton jButtonFirst10;
-    private javax.swing.JButton jButtonFirst2;
-    private javax.swing.JButton jButtonFirst3;
-    private javax.swing.JButton jButtonFirst4;
-    private javax.swing.JButton jButtonFirst5;
-    private javax.swing.JButton jButtonFirst6;
-    private javax.swing.JButton jButtonFirst7;
-    private javax.swing.JButton jButtonFirst8;
-    private javax.swing.JButton jButtonFirst9;
-    private javax.swing.JButton jButtonLast;
-    private javax.swing.JButton jButtonLast1;
     private javax.swing.JButton jButtonLast10;
-    private javax.swing.JButton jButtonLast2;
-    private javax.swing.JButton jButtonLast3;
-    private javax.swing.JButton jButtonLast4;
-    private javax.swing.JButton jButtonLast5;
-    private javax.swing.JButton jButtonLast6;
-    private javax.swing.JButton jButtonLast7;
-    private javax.swing.JButton jButtonLast8;
-    private javax.swing.JButton jButtonLast9;
-    private javax.swing.JButton jButtonNext;
-    private javax.swing.JButton jButtonNext1;
     private javax.swing.JButton jButtonNext10;
-    private javax.swing.JButton jButtonNext2;
-    private javax.swing.JButton jButtonNext3;
-    private javax.swing.JButton jButtonNext4;
-    private javax.swing.JButton jButtonNext5;
-    private javax.swing.JButton jButtonNext6;
-    private javax.swing.JButton jButtonNext7;
-    private javax.swing.JButton jButtonNext8;
-    private javax.swing.JButton jButtonNext9;
-    private javax.swing.JButton jButtonPrev;
-    private javax.swing.JButton jButtonPrev1;
     private javax.swing.JButton jButtonPrev10;
-    private javax.swing.JButton jButtonPrev2;
-    private javax.swing.JButton jButtonPrev3;
-    private javax.swing.JButton jButtonPrev4;
-    private javax.swing.JButton jButtonPrev5;
-    private javax.swing.JButton jButtonPrev6;
-    private javax.swing.JButton jButtonPrev7;
-    private javax.swing.JButton jButtonPrev8;
-    private javax.swing.JButton jButtonPrev9;
-    private javax.swing.JComboBox jComboBoxJumlahBaris;
-    private javax.swing.JComboBox jComboBoxJumlahBaris1;
     private javax.swing.JComboBox jComboBoxJumlahBaris10;
-    private javax.swing.JComboBox jComboBoxJumlahBaris2;
-    private javax.swing.JComboBox jComboBoxJumlahBaris3;
-    private javax.swing.JComboBox jComboBoxJumlahBaris4;
-    private javax.swing.JComboBox jComboBoxJumlahBaris5;
-    private javax.swing.JComboBox jComboBoxJumlahBaris6;
-    private javax.swing.JComboBox jComboBoxJumlahBaris7;
-    private javax.swing.JComboBox jComboBoxJumlahBaris8;
-    private javax.swing.JComboBox jComboBoxJumlahBaris9;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel16;
-    private javax.swing.JPanel jPanel17;
-    private javax.swing.JPanel jPanel18;
-    private javax.swing.JPanel jPanel19;
-    private javax.swing.JPanel jPanel20;
-    private javax.swing.JPanel jPanel21;
-    private javax.swing.JPanel jPanel22;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel24;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JScrollPane jScrollPane10;
-    private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JScrollPane jScrollPane9;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable10;
     private javax.swing.JTable jTable11;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JTable jTable5;
-    private javax.swing.JTable jTable6;
-    private javax.swing.JTable jTable7;
-    private javax.swing.JTable jTable8;
-    private javax.swing.JTable jTable9;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 
-    private void loadData() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
