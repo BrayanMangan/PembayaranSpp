@@ -169,24 +169,29 @@ public class FrameJenisPembayaran extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
+        jButton22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/icon_download.gif"))); // NOI18N
         jButton22.setText("Tambah");
-        jButton22.setPreferredSize(new java.awt.Dimension(80, 30));
+        jButton22.setPreferredSize(new java.awt.Dimension(120, 30));
         jPanel2.add(jButton22);
 
+        jButton23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/page_edit.gif"))); // NOI18N
         jButton23.setText("Edit");
-        jButton23.setPreferredSize(new java.awt.Dimension(80, 30));
+        jButton23.setPreferredSize(new java.awt.Dimension(120, 30));
         jPanel2.add(jButton23);
 
+        jButton24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/page_delete.gif"))); // NOI18N
         jButton24.setText("Hapus");
-        jButton24.setPreferredSize(new java.awt.Dimension(80, 30));
+        jButton24.setPreferredSize(new java.awt.Dimension(120, 30));
         jPanel2.add(jButton24);
 
+        jButton25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/action_refresh.gif"))); // NOI18N
         jButton25.setText("Refresh");
-        jButton25.setPreferredSize(new java.awt.Dimension(80, 30));
+        jButton25.setPreferredSize(new java.awt.Dimension(120, 30));
         jPanel2.add(jButton25);
 
+        jButton26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/action_stop.gif"))); // NOI18N
         jButton26.setText("Keluar");
-        jButton26.setPreferredSize(new java.awt.Dimension(80, 30));
+        jButton26.setPreferredSize(new java.awt.Dimension(120, 30));
         jButton26.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton26ActionPerformed(evt);

@@ -102,20 +102,20 @@ public class FrameKelas extends javax.swing.JInternalFrame {
 
         setTitle("Data Kelas");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
-            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
             }
             public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
             }
-            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
             }
-            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
-                formInternalFrameOpened(evt);
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
             }
         });
 
@@ -185,6 +185,7 @@ public class FrameKelas extends javax.swing.JInternalFrame {
         });
         jPanel4.add(btnLast);
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/date_delete.gif"))); // NOI18N
         jButton1.setText("Hapus");
         jButton1.setPreferredSize(new java.awt.Dimension(100, 30));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -194,6 +195,7 @@ public class FrameKelas extends javax.swing.JInternalFrame {
         });
         jPanel1.add(jButton1);
 
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/page_edit.gif"))); // NOI18N
         jButton3.setText("Edit");
         jButton3.setPreferredSize(new java.awt.Dimension(100, 30));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -203,6 +205,7 @@ public class FrameKelas extends javax.swing.JInternalFrame {
         });
         jPanel1.add(jButton3);
 
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/action_stop.gif"))); // NOI18N
         jButton2.setText("Keluar");
         jButton2.setPreferredSize(new java.awt.Dimension(100, 30));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -216,6 +219,7 @@ public class FrameKelas extends javax.swing.JInternalFrame {
 
         txtNamaKelas.setPreferredSize(new java.awt.Dimension(200, 30));
 
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/date_new.gif"))); // NOI18N
         jButton4.setText("Simpan");
         jButton4.setPreferredSize(new java.awt.Dimension(100, 30));
         jButton4.addActionListener(new java.awt.event.ActionListener() {

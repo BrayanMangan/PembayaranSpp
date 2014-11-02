@@ -83,9 +83,11 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jButtonMenuDataSiswa.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jButtonMenuDataSiswa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/list_users.gif"))); // NOI18N
         jButtonMenuDataSiswa.setText("DATA SISWA");
         jButtonMenuDataSiswa.setToolTipText("Untuk membuat nama kelas");
-        jButtonMenuDataSiswa.setPreferredSize(new java.awt.Dimension(150, 40));
+        jButtonMenuDataSiswa.setBorder(null);
+        jButtonMenuDataSiswa.setPreferredSize(new java.awt.Dimension(150, 70));
         jButtonMenuDataSiswa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonMenuDataSiswaActionPerformed(evt);
@@ -93,9 +95,10 @@ public class FrameAplikasi extends javax.swing.JFrame {
         });
 
         jButtonMenuKelas.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jButtonMenuKelas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/icon_home.gif"))); // NOI18N
         jButtonMenuKelas.setText("KELAS");
         jButtonMenuKelas.setToolTipText("Untuk membuat nama kelas");
-        jButtonMenuKelas.setPreferredSize(new java.awt.Dimension(150, 40));
+        jButtonMenuKelas.setPreferredSize(new java.awt.Dimension(150, 70));
         jButtonMenuKelas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonMenuKelasActionPerformed(evt);
@@ -107,30 +110,28 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jButtonMenuDataSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonMenuKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(913, 913, 913))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonMenuDataSiswa, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-                    .addComponent(jButtonMenuKelas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jButtonMenuDataSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonMenuKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane1.addTab("KESISWAAN", jPanel1);
 
         jPanel5.setBackground(new java.awt.Color(149, 186, 211));
+        jPanel5.setPreferredSize(new java.awt.Dimension(700, 65));
 
         jButtonMenuJenisPembayaran.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jButtonMenuJenisPembayaran.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/icon_network.gif"))); // NOI18N
         jButtonMenuJenisPembayaran.setText("JENIS PEMBAYARAN");
         jButtonMenuJenisPembayaran.setToolTipText("Untuk membuat jenis/nama pembayaran");
-        jButtonMenuJenisPembayaran.setPreferredSize(new java.awt.Dimension(150, 40));
+        jButtonMenuJenisPembayaran.setPreferredSize(new java.awt.Dimension(180, 68));
         jButtonMenuJenisPembayaran.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonMenuJenisPembayaranActionPerformed(evt);
@@ -138,9 +139,10 @@ public class FrameAplikasi extends javax.swing.JFrame {
         });
 
         jButtonMenuBilingPembayaran.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jButtonMenuBilingPembayaran.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/list_comments.gif"))); // NOI18N
         jButtonMenuBilingPembayaran.setText("BILING PEMBAYARAN");
         jButtonMenuBilingPembayaran.setToolTipText("Membagi siswa dalam jenis pembayaran");
-        jButtonMenuBilingPembayaran.setPreferredSize(new java.awt.Dimension(150, 40));
+        jButtonMenuBilingPembayaran.setPreferredSize(new java.awt.Dimension(180, 68));
         jButtonMenuBilingPembayaran.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonMenuBilingPembayaranActionPerformed(evt);
@@ -152,20 +154,16 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButtonMenuJenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addComponent(jButtonMenuJenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonMenuBilingPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(353, Short.MAX_VALUE))
+                .addContainerGap(326, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButtonMenuJenisPembayaran, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonMenuBilingPembayaran, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jButtonMenuBilingPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonMenuJenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane1.addTab("PEMBAYARAN", jPanel5);
@@ -175,6 +173,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/action_stop.gif"))); // NOI18N
         jMenuItem1.setText("Exit");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -187,6 +186,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
 
         jMTransaksi.setText("Transaksi");
 
+        jmiTransaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/list_users.gif"))); // NOI18N
         jmiTransaksi.setText("Pembayaran");
         jmiTransaksi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -199,6 +199,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
 
         jMLaporan.setText("Laporan");
 
+        jmiDataSiswa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/icon_user.gif"))); // NOI18N
         jmiDataSiswa.setText("Data Siswa");
         jmiDataSiswa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -207,6 +208,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
         });
         jMLaporan.add(jmiDataSiswa);
 
+        jmiPembayaran.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/action_paste.gif"))); // NOI18N
         jmiPembayaran.setText("Pembayaran");
         jmiPembayaran.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -223,17 +225,13 @@ public class FrameAplikasi extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(1, 1, 1)
-                .addComponent(customDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 967, Short.MAX_VALUE)
-                .addGap(1, 1, 1))
+            .addComponent(customDesktopPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(1, 1, 1)
-                .addComponent(customDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
-                .addGap(1, 1, 1))
+                .addComponent(customDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
 
         pack();
