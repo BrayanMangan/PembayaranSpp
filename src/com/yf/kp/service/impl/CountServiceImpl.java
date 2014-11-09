@@ -29,4 +29,55 @@ public class CountServiceImpl extends HibernateUtil implements CountService {
         return (Long) jml;
     }
 
+    @Override
+    public Long countAngsuran() {
+        Object jml = 0;
+        connect();
+        try {
+            Query q = manager().createQuery("SELECT COUNT(A.id) AS jml FROM Angsuran A");
+            jml = q.uniqueResult();
+            commit();
+        } catch (HibernateException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            rollback();
+        } finally {
+            close();
+        }
+        return (Long) jml;
+    }
+
+    @Override
+    public Long countBulanan() {
+        Object jml = 0;
+        connect();
+        try {
+            Query q = manager().createQuery("SELECT COUNT(B.id) AS jml FROM Bulanan B");
+            jml = q.uniqueResult();
+            commit();
+        } catch (HibernateException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            rollback();
+        } finally {
+            close();
+        }
+        return (Long) jml;
+    }
+
+    @Override
+    public Long countTunai() {
+        Object jml = 0;
+        connect();
+        try {
+            Query q = manager().createQuery("SELECT COUNT(T.id) AS jml FROM Tunai T");
+            jml = q.uniqueResult();
+            commit();
+        } catch (HibernateException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            rollback();
+        } finally {
+            close();
+        }
+        return (Long) jml;
+    }
+
 }

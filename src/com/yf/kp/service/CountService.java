@@ -8,4 +8,10 @@ public interface CountService {
 
     Long countKelas();
 
+    Long countAngsuran();
+
+    Long countBulanan();
+
+    Long countTunai();
+
 }

@@ -1,5 +1,8 @@
 package com.yf.kp.design;
 
+import com.yf.kp.design.billing.FrameBiling;
+import com.yf.kp.design.transaksi.FrameTransaksi;
+import com.yf.kp.design.jenispembayaran.FrameJenisPembayaran;
 import com.yf.kp.design.siswa.FrameSiswa;
 import com.yf.kp.design.kelas.FrameKelas;
 import java.awt.Dimension;

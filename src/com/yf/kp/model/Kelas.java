@@ -1,9 +1,7 @@
 package com.yf.kp.model;
 
 import com.yf.kp.model.base.BaseModel;
-import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**

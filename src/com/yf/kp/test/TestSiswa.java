@@ -33,7 +33,7 @@ public class TestSiswa {
 
         Siswa fani = new Siswa();
         fani.setNama("Fani Triastowo");
-        fani.setNis(1003040098);
+        fani.setNis("1003040098");
 
         session.save(fani);
         session.getTransaction().commit();

@@ -14,6 +14,7 @@ import com.yf.kp.service.impl.CountServiceImpl;
 import com.yf.kp.service.impl.KelasServiceImpl;
 import com.yf.kp.service.impl.SiswaServiceImpl;
 import com.yf.kp.utility.TableAutoColumnWidth;
+import com.yf.kp.utility.TextBehaviour;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -38,6 +39,42 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
      */
     public FrameSiswa() {
         initComponents();
+    }
+
+    public void prepareSearch() {
+        if (cmbCari.getSelectedItem() == "NIS") {
+            searchByNis();
+        } else if (cmbCari.getSelectedItem() == "NAMA") {
+            searchByNama();
+        }
+    }
+
+    public void searchByNis() {
+        try {
+            service = new SiswaServiceImpl();
+            tableModel = new SiswaTableModel();
+            String nis = txtCari.getText();
+            list = service.findByNis(nis);
+            tableModel.setList(list);
+            tableSiswa.setModel(tableModel);
+            TableAutoColumnWidth tableAutoColumnWidth = new TableAutoColumnWidth(tableSiswa);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Dimohon Input dengan benar");
+        }
+    }
+
+    public void searchByNama() {
+        try {
+            service = new SiswaServiceImpl();
+            tableModel = new SiswaTableModel();
+            String nama = txtCari.getText();
+            list = service.findByNama(nama);
+            tableModel.setList(list);
+            tableSiswa.setModel(tableModel);
+            TableAutoColumnWidth tableAutoColumnWidth = new TableAutoColumnWidth(tableSiswa);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Dimohon Input dengan benar");
+        }
     }
 
     public void cbBaris() {
@@ -146,22 +183,23 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        cmbCari = new javax.swing.JComboBox();
 
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
-            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
-                formInternalFrameOpened(evt);
-            }
-            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
             }
-            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
             }
-            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
             }
-            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
             }
         });
 
@@ -353,7 +391,7 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
                     .addComponent(jLabel12)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(162, Short.MAX_VALUE))
@@ -413,9 +451,15 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
 
         jLabel13.setText("Cari");
 
+        txtCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCariKeyReleased(evt);
+            }
+        });
+
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/action_stop.gif"))); // NOI18N
         jButton2.setText("Keluar");
-        jButton2.setPreferredSize(new java.awt.Dimension(120, 30));
+        jButton2.setPreferredSize(new java.awt.Dimension(100, 30));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -424,7 +468,7 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/page_edit.gif"))); // NOI18N
         jButton3.setText("Edit");
-        jButton3.setPreferredSize(new java.awt.Dimension(120, 30));
+        jButton3.setPreferredSize(new java.awt.Dimension(100, 30));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -433,12 +477,14 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/page_delete.gif"))); // NOI18N
         jButton4.setText("Hapus");
-        jButton4.setPreferredSize(new java.awt.Dimension(120, 30));
+        jButton4.setPreferredSize(new java.awt.Dimension(100, 30));
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
+
+        cmbCari.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "NAMA", "NIS" }));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -453,6 +499,8 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -470,7 +518,8 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -562,7 +611,7 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
             model = new Siswa();
             if ("Update".equals(jButton1.getText())) {
                 model.setId(Long.valueOf(this.getTitle()));
-                model.setNis(Integer.parseInt(txtNis.getText()));
+                model.setNis(txtNis.getText());
                 model.setNama(txtNama.getText());
                 model.setKelas(cmbKelas.getSelectedItem().toString());
                 model.setJenis_kelamin(cmbJenisKelamin.getSelectedItem().toString());
@@ -589,7 +638,7 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
                 txtTelp.setText("");
                 txtAlamatOrtu.setText("");
             } else {
-                model.setNis(Integer.parseInt(txtNis.getText()));
+                model.setNis(txtNis.getText());
                 model.setNama(txtNama.getText());
                 model.setKelas(cmbKelas.getSelectedItem().toString());
                 model.setJenis_kelamin(cmbJenisKelamin.getSelectedItem().toString());
@@ -602,6 +651,9 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
                 model.setPekerjaan(txtPekerjaanOrtu.getText());
                 model.setTelp(txtTelp.getText());
                 model.setAlamat_ortu(txtAlamatOrtu.getText());
+                model.setAngsuran(false);
+                model.setBulanan(false);
+                model.setTunai(false);
                 service.save(model);
                 loadData();
                 this.setTitle("");
@@ -675,6 +727,10 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
         jButton1.setText("Simpan");
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void txtCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCariKeyReleased
+        prepareSearch();
+    }//GEN-LAST:event_txtCariKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFirst;
@@ -684,6 +740,7 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox cmbAgama;
     private javax.swing.JComboBox cmbAgamaOrtu;
     private javax.swing.JComboBox cmbBanyakBaris;
+    private javax.swing.JComboBox cmbCari;
     private javax.swing.JComboBox cmbJenisKelamin;
     private javax.swing.JComboBox cmbKelas;
     private com.toedter.calendar.JDateChooser dateTanggalLahir;
@@ -725,4 +782,5 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtTelp;
     private javax.swing.JTextField txtTempatLahir;
     // End of variables declaration//GEN-END:variables
+
 }
