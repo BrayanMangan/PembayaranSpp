@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database Configuration -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/Pembayaran_Siswa?zeroDateTimeBehavior=convertToNull</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">root</property>
+        <!-- Hibernate Default Scheme -->
+        <property name="hibernate.default_schema">Pembayaran_Siswa</property>
+        <!-- Agar perintah SQL dapat terlihat di dalam console window saat eksekusi -->
+        <property name="hibernate.show_sql">true</property>
+        <!-- Digunakan agar hibernate melakukan update table secara otomatis jika struktur atau data berbeda dengan yang ada dalam database -->
+        <!-- Atau membuat table baru jika belum terdapat table tertentu sesuai dengan Model class-->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <!-- Simpan session context di dalam thread-->
+        <property name="hibernate.current_session_context_class">thread</property>
+        <mapping class="com.yf.kp.model.Kelas"/>
+        <mapping class="com.yf.kp.model.Siswa"/>
+        <mapping class="com.yf.kp.model.base.BaseModel"/>
+        <mapping class="com.yf.kp.model.Angsuran"/>
+        <mapping class="com.yf.kp.model.Bulanan"/>
+        <mapping class="com.yf.kp.model.Tunai"/>
+        <mapping class="com.yf.kp.model.TagihanSiswa"/>
+    </session-factory>
+</hibernate-configuration>
