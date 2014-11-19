@@ -5,6 +5,9 @@ import com.yf.kp.design.transaksi.FrameTransaksi;
 import com.yf.kp.design.jenispembayaran.FrameJenisPembayaran;
 import com.yf.kp.design.siswa.FrameSiswa;
 import com.yf.kp.design.kelas.FrameKelas;
+import com.yf.kp.design.report.dialog.ReportDataSiswa;
+import com.yf.kp.design.report.dialog.ReportPembayaran;
+import com.yf.kp.design.report.dialog.ReportTanggungan;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -59,6 +62,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jButtonMenuJenisPembayaran = new javax.swing.JButton();
         jButtonMenuBilingPembayaran = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -67,6 +71,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jMLaporan = new javax.swing.JMenu();
         jmiDataSiswa = new javax.swing.JMenuItem();
         jmiPembayaran = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Aplikasi Pembayaran");
@@ -113,16 +118,16 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jButtonMenuDataSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonMenuDataSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonMenuKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonMenuKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jButtonMenuDataSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jButtonMenuKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jButtonMenuDataSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonMenuKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane1.addTab("KESISWAAN", jPanel1);
@@ -157,10 +162,10 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jButtonMenuJenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonMenuJenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonMenuBilingPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(326, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,8 +176,31 @@ public class FrameAplikasi extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("PEMBAYARAN", jPanel5);
 
-        customDesktopPane1.add(jTabbedPane1);
-        jTabbedPane1.setBounds(0, 0, 700, 100);
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/LogoSMP.png"))); // NOI18N
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel1.setPreferredSize(new java.awt.Dimension(175, 205));
+
+        javax.swing.GroupLayout customDesktopPane1Layout = new javax.swing.GroupLayout(customDesktopPane1);
+        customDesktopPane1.setLayout(customDesktopPane1Layout);
+        customDesktopPane1Layout.setHorizontalGroup(
+            customDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(customDesktopPane1Layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        customDesktopPane1Layout.setVerticalGroup(
+            customDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(customDesktopPane1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        customDesktopPane1.setLayer(jTabbedPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        customDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jLabel1.getAccessibleContext().setAccessibleParent(this);
 
         jMenu1.setText("File");
 
@@ -220,6 +248,15 @@ public class FrameAplikasi extends javax.swing.JFrame {
         });
         jMLaporan.add(jmiPembayaran);
 
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/page_delete.gif"))); // NOI18N
+        jMenuItem2.setText("Tanggungan");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMLaporan.add(jMenuItem2);
+
         jMenuBar1.add(jMLaporan);
 
         setJMenuBar(jMenuBar1);
@@ -228,13 +265,11 @@ public class FrameAplikasi extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(customDesktopPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE)
+            .addComponent(customDesktopPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(customDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(customDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -246,35 +281,6 @@ public class FrameAplikasi extends javax.swing.JFrame {
         customDesktopPane1.add(Ft);
         Ft.setVisible(true);
     }//GEN-LAST:event_jmiTransaksiActionPerformed
-
-    private void jButtonMenuDataSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuDataSiswaActionPerformed
-        FrameSiswa fs = new FrameSiswa();
-        fs.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
-        customDesktopPane1.add(fs);
-        fs.setVisible(true);
-    }//GEN-LAST:event_jButtonMenuDataSiswaActionPerformed
-
-    private void jButtonMenuKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuKelasActionPerformed
-        // TODO add your handling code here:
-        FrameKelas fk = new FrameKelas();
-        fk.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
-        customDesktopPane1.add(fk);
-        fk.setVisible(true);
-    }//GEN-LAST:event_jButtonMenuKelasActionPerformed
-
-    private void jButtonMenuJenisPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuJenisPembayaranActionPerformed
-        FrameJenisPembayaran frameJenisPembayaran = new FrameJenisPembayaran();
-        frameJenisPembayaran.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
-        customDesktopPane1.add(frameJenisPembayaran);
-        frameJenisPembayaran.setVisible(true);
-    }//GEN-LAST:event_jButtonMenuJenisPembayaranActionPerformed
-
-    private void jButtonMenuBilingPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuBilingPembayaranActionPerformed
-        FrameBiling Fb = new FrameBiling();
-        Fb.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
-        customDesktopPane1.add(Fb);
-        Fb.setVisible(true);
-    }//GEN-LAST:event_jButtonMenuBilingPembayaranActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if (JOptionPane.showConfirmDialog(null, "Are You Sure to Exit?", "Exit Application", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -289,12 +295,48 @@ public class FrameAplikasi extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jmiDataSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiDataSiswaActionPerformed
-        // TODO add your handling code here:
+        ReportDataSiswa RS = new ReportDataSiswa(null, true);
+        RS.setVisible(true);
     }//GEN-LAST:event_jmiDataSiswaActionPerformed
 
     private void jmiPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiPembayaranActionPerformed
-        
+        ReportPembayaran RP = new ReportPembayaran(null, true);
+        RP.setVisible(true);
     }//GEN-LAST:event_jmiPembayaranActionPerformed
+
+    private void jButtonMenuBilingPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuBilingPembayaranActionPerformed
+        FrameBiling Fb = new FrameBiling();
+        Fb.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
+        customDesktopPane1.add(Fb);
+        Fb.setVisible(true);
+    }//GEN-LAST:event_jButtonMenuBilingPembayaranActionPerformed
+
+    private void jButtonMenuJenisPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuJenisPembayaranActionPerformed
+        FrameJenisPembayaran frameJenisPembayaran = new FrameJenisPembayaran();
+        frameJenisPembayaran.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
+        customDesktopPane1.add(frameJenisPembayaran);
+        frameJenisPembayaran.setVisible(true);
+    }//GEN-LAST:event_jButtonMenuJenisPembayaranActionPerformed
+
+    private void jButtonMenuKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuKelasActionPerformed
+        // TODO add your handling code here:
+        FrameKelas fk = new FrameKelas();
+        fk.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
+        customDesktopPane1.add(fk);
+        fk.setVisible(true);
+    }//GEN-LAST:event_jButtonMenuKelasActionPerformed
+
+    private void jButtonMenuDataSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuDataSiswaActionPerformed
+        FrameSiswa fs = new FrameSiswa();
+        fs.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
+        customDesktopPane1.add(fs);
+        fs.setVisible(true);
+    }//GEN-LAST:event_jButtonMenuDataSiswaActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        ReportTanggungan RT = new ReportTanggungan(null, true);
+        RT.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line argument
@@ -306,11 +348,13 @@ public class FrameAplikasi extends javax.swing.JFrame {
     private javax.swing.JButton jButtonMenuDataSiswa;
     private javax.swing.JButton jButtonMenuJenisPembayaran;
     private javax.swing.JButton jButtonMenuKelas;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMLaporan;
     private javax.swing.JMenu jMTransaksi;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JTabbedPane jTabbedPane1;
