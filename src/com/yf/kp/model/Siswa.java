@@ -12,7 +12,7 @@ import javax.persistence.TemporalType;
  * @author anonymous
  */
 @Entity
-@Table(name = "siswa")
+@Table(name = "master_siswa")
 public class Siswa extends BaseModel {
 
     private String nis;
@@ -21,20 +21,14 @@ public class Siswa extends BaseModel {
     private String jenis_kelamin;
     private String agama;
     private String tempat_lahir;
-
     @Temporal(TemporalType.DATE)
     private Date tgl_lahir;
-
     private String alamat;
     private String nama_ortu;
     private String pekerjaan;
     private String agama_ortu;
     private String telp;
     private String alamat_ortu;
-
-    private Boolean angsuran;
-    private Boolean bulanan;
-    private Boolean tunai;
 
     public Siswa() {
     }
@@ -157,30 +151,6 @@ public class Siswa extends BaseModel {
 
     public void setAlamat_ortu(String alamat_ortu) {
         this.alamat_ortu = alamat_ortu;
-    }
-
-    public Boolean isAngsuran() {
-        return angsuran;
-    }
-
-    public void setAngsuran(Boolean angsuran) {
-        this.angsuran = angsuran;
-    }
-
-    public Boolean isBulanan() {
-        return bulanan;
-    }
-
-    public void setBulanan(Boolean bulanan) {
-        this.bulanan = bulanan;
-    }
-
-    public Boolean isTunai() {
-        return tunai;
-    }
-
-    public void setTunai(Boolean tunai) {
-        this.tunai = tunai;
     }
 
 }

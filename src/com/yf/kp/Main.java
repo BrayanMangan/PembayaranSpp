@@ -21,10 +21,10 @@ public class Main {
             public void run() {
                 try {
                     UIManager.setLookAndFeel(new WebLookAndFeel());
-                    new FrameAplikasi().setVisible(true);
                 } catch (UnsupportedLookAndFeelException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                new FrameAplikasi().setVisible(true);
             }
         });
     }

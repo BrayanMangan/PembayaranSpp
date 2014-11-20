@@ -25,7 +25,7 @@ import javax.persistence.Table;
  * @author anonymous
  */
 @Entity
-@Table(name = "bulanan")
+@Table(name = "master_bulanan")
 public class Bulanan extends BaseModel {
 
     private String nama;

@@ -52,66 +52,12 @@ public class SiswaServiceImpl extends AbstractServiceImpl<Siswa> implements Sisw
     }
 
     @Override
-    public List<Siswa> findAllByKelasAndAngsuran(String kelas, Boolean expression) {
-        List<Siswa> listSiswa = new ArrayList<>();
-        connect();
-        try {
-            Query q = manager().createQuery("SELECT s FROM Siswa s WHERE s.kelas = :kode AND s.angsuran = :expression");
-            q.setParameter("kode", "" + kelas + "");
-            q.setParameter("expression", false);
-            listSiswa = q.list();
-            commit();
-        } catch (HibernateException e) {
-            rollback();
-        } finally {
-            close();
-        }
-        return listSiswa;
-    }
-
-    @Override
-    public List<Siswa> findAllByKelasAndBulanan(String kelas, boolean b) {
-        List<Siswa> listSiswa = new ArrayList<>();
-        connect();
-        try {
-            Query q = manager().createQuery("SELECT s FROM Siswa s WHERE s.kelas = :kode AND s.bulanan = :expression");
-            q.setParameter("kode", "" + kelas + "");
-            q.setParameter("expression", false);
-            listSiswa = q.list();
-            commit();
-        } catch (HibernateException e) {
-            rollback();
-        } finally {
-            close();
-        }
-        return listSiswa;
-    }
-
-    @Override
-    public List<Siswa> findAllByKelasAndTunai(String kelas, boolean b) {
-        List<Siswa> listSiswa = new ArrayList<>();
-        connect();
-        try {
-            Query q = manager().createQuery("SELECT s FROM Siswa s WHERE s.kelas = :kode AND s.tunai = :expression");
-            q.setParameter("kode", "" + kelas + "");
-            q.setParameter("expression", false);
-            listSiswa = q.list();
-            commit();
-        } catch (HibernateException e) {
-            rollback();
-        } finally {
-            close();
-        }
-        return listSiswa;
-    }
-
-    @Override
     public List<Siswa> findAllByKelas(String kelas) {
         List<Siswa> listSiswa = new ArrayList<>();
         connect();
         try {
             Query q = manager().createQuery("SELECT s FROM Siswa s WHERE s.kelas = :kode");
-            q.setParameter("kode", "" + kelas + "");
+            q.setParameter("kode", kelas);
             listSiswa = q.list();
             commit();
         } catch (HibernateException e) {

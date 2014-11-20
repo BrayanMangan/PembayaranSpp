@@ -1,0 +1,55 @@
+/*
+ * Copyright (C) 2014 anonymous
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.yf.kp.service.impl;
+
+import com.yf.kp.model.TagihanAngsuran;
+import com.yf.kp.service.TagihanAngsuranService;
+import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+
+/**
+ *
+ * @author anonymous
+ */
+public class TagihanAngsuranServiceImpl extends AbstractServiceImpl<TagihanAngsuran> implements TagihanAngsuranService {
+
+    public TagihanAngsuranServiceImpl() {
+        super(TagihanAngsuran.class);
+    }
+
+    @Override
+    public void saveBatch(TagihanAngsuran tagihanAngsuran, String nama) {
+        connect();
+        try {
+            manager().persist(tagihanAngsuran);
+            if (nama.length() % 20 == 0) { //20, same as the JDBC batch size
+                //flush a batch of inserts and release memory:
+                manager().flush();
+                manager().clear();
+            }
+            commit();
+        } catch (HibernateException ex) {
+            rollback();
+            throw ex;
+        } finally {
+            close();
+        }
+    }
+
+}

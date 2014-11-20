@@ -14,19 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.yf.kp.service.impl;
 
-import com.yf.kp.model.TagihanSiswa;
-import com.yf.kp.service.TagihanService;
+package com.yf.kp.service;
+
+import com.yf.kp.model.TagihanBulanan;
 
 /**
  *
  * @author anonymous
  */
-public class TagihanServiceImpl extends AbstractServiceImpl<TagihanSiswa> implements TagihanService {
-
-    public TagihanServiceImpl() {
-        super(TagihanSiswa.class);
-    }
-
+public interface TagihanBulananService extends AbstractService<TagihanBulanan>{
+    
 }

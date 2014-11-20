@@ -21,5 +21,5 @@ public interface AbstractService<T> {
     public List<T> findAll() throws HibernateException;
 
     public List<T> findAll(int halaman, int banyakBaris) throws HibernateException;
-
+    
 }

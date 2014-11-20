@@ -14,46 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.yf.kp.model;
+package com.yf.kp.service.impl;
 
-import com.yf.kp.model.base.BaseModel;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import com.yf.kp.model.TagihanBulanan;
+import com.yf.kp.service.TagihanBulananService;
 
 /**
  *
  * @author anonymous
  */
-@Entity
-@Table(name = "master_angsuran")
-public class Angsuran extends BaseModel {
+public class TagihanBulananServiceImpl extends AbstractServiceImpl<TagihanBulanan> implements TagihanBulananService {
 
-    private String nama;
-    private Integer kaliBayar;
-    private Double jumlah;
-
-    public String getNama() {
-        return nama;
-    }
-
-    public void setNama(String nama) {
-        this.nama = nama;
-    }
-
-    public Integer getKaliBayar() {
-        return kaliBayar;
-    }
-
-    public void setKaliBayar(Integer kaliBayar) {
-        this.kaliBayar = kaliBayar;
-    }
-
-    public Double getJumlah() {
-        return jumlah;
-    }
-
-    public void setJumlah(Double jumlah) {
-        this.jumlah = jumlah;
+    public TagihanBulananServiceImpl() {
+        super(TagihanBulanan.class);
     }
 
 }

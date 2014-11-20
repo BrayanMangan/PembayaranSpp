@@ -21,21 +21,20 @@ import com.yf.kp.model.Angsuran;
 import com.yf.kp.model.Bulanan;
 import com.yf.kp.model.Kelas;
 import com.yf.kp.model.Siswa;
-import com.yf.kp.model.TagihanSiswa;
+import com.yf.kp.model.TagihanAngsuran;
 import com.yf.kp.model.Tunai;
 import com.yf.kp.service.AngsuranService;
 import com.yf.kp.service.BulananService;
 import com.yf.kp.service.KelasService;
 import com.yf.kp.service.SiswaService;
-import com.yf.kp.service.TagihanService;
+import com.yf.kp.service.TagihanAngsuranService;
 import com.yf.kp.service.TunaiService;
 import com.yf.kp.service.impl.AngsuranServiceImpl;
 import com.yf.kp.service.impl.BulananServiceImpl;
 import com.yf.kp.service.impl.KelasServiceImpl;
 import com.yf.kp.service.impl.SiswaServiceImpl;
-import com.yf.kp.service.impl.TagihanServiceImpl;
+import com.yf.kp.service.impl.TagihanAngsuranServiceImpl;
 import com.yf.kp.service.impl.TunaiServiceImpl;
-import java.awt.event.ItemEvent;
 import java.util.Collection;
 import java.util.List;
 
@@ -45,154 +44,92 @@ import java.util.List;
  */
 public class FrameBiling extends javax.swing.JInternalFrame {
 
-    private List<Angsuran> angsuranList;
-    private List<Bulanan> bulananList;
-    private List<Tunai> tunaiList;
-    private List<Kelas> kelasList;
-    private List<Siswa> siswaList;
-    private KelasService kelasService;
-    private DefaultDoubleListModel<String> model;
+    private List<Siswa> listSiswa;
+    private SiswaService siswaService;
+    private DefaultDoubleListModel<String> dblModel;
+
+    private void pilihKelas() {
+        dblModel.removeAllSourceValues();
+        dblModel.removeAllTargetValues();
+        dblAngsuran.setModel(dblModel);
+        cmbKelas.removeAllItems();
+        KelasService kelasService = new KelasServiceImpl();
+        List<Kelas> listKelas = kelasService.findAll();
+        for (Kelas kelas : listKelas) {
+            cmbKelas.addItem(kelas.getNama_kelas());
+        }
+    }
+
+    private void inputSiswa() {
+        if (tabUtama.getSelectedIndex() == 0) {
+            cmbAngsuranNamaTagihan.removeAllItems();
+            cmbAngsuranNamaTagihan.addItem("Pilih");
+            AngsuranService angsuranService = new AngsuranServiceImpl();
+            List<Angsuran> listAngsuran = angsuranService.findAll();
+            for (Angsuran angsuran : listAngsuran) {
+                cmbAngsuranNamaTagihan.addItem(angsuran.getNama());
+            }
+        } else if (tabUtama.getSelectedIndex() == 1) {
+            cmbBulananNamaTagihan.removeAllItems();
+            cmbAngsuranNamaTagihan.addItem("Pilih");
+            BulananService bulananService = new BulananServiceImpl();
+            List<Bulanan> listBulanan = bulananService.findAll();
+            for (Bulanan bulanan : listBulanan) {
+                cmbBulananNamaTagihan.addItem(bulanan.getNama());
+            }
+        } else if (tabUtama.getSelectedIndex() == 2) {
+            cmbTunaiNamaTagihan.removeAllItems();
+            cmbAngsuranNamaTagihan.addItem("Pilih");
+            TunaiService tunaiService = new TunaiServiceImpl();
+            List<Tunai> listTunai = tunaiService.findAll();
+            for (Tunai tunai : listTunai) {
+                cmbTunaiNamaTagihan.addItem(tunai.getNama());
+            }
+        }
+    }
+
+    /**
+     * Tab Angsuran
+     */
+    private void pilihNamaTagihanAngsuran() {
+        dblModel = new DefaultDoubleListModel<>(String.class);
+        if (!"Pilih".equals(cmbAngsuranNamaTagihan.getSelectedItem().toString())) {
+            siswaService = new SiswaServiceImpl();
+            listSiswa = siswaService.findAllByKelas(cmbKelas.getSelectedItem().toString());
+            for (Siswa siswa : listSiswa) {
+                dblModel.add(siswa.getNama());
+            }
+            dblAngsuran.setModel(dblModel);
+        } else {
+            dblModel.removeAllSourceValues();
+            dblModel.removeAllTargetValues();
+            dblAngsuran.setModel(dblModel);
+        }
+    }
+
+    private void simpanAngsuran() {
+        Collection<String> values = dblModel.getValues();
+        siswaService = new SiswaServiceImpl();
+        TagihanAngsuranService tagihanAngsuranService = new TagihanAngsuranServiceImpl();
+        for (String nama : values) {
+            Siswa siswa = siswaService.findOneByName(nama);
+            TagihanAngsuran tagihanAngsuran = new TagihanAngsuran();
+            tagihanAngsuran.setNis(siswa.getNis());
+            tagihanAngsuran.setNama(siswa.getNama());
+            tagihanAngsuran.setKelas(cmbKelas.getSelectedItem().toString());
+            tagihanAngsuran.setNamaTagihan(cmbAngsuranNamaTagihan.getSelectedItem().toString());
+            tagihanAngsuran.setKategori("Angsuran");
+            tagihanAngsuranService.saveBatch(tagihanAngsuran, nama);
+        }
+        dblModel.removeAllTargetValues();
+        dblAngsuran.setModel(dblModel);
+    }
 
     /**
      * Creates new form FrameBiling
      */
     public FrameBiling() {
         initComponents();
-    }
-
-    private void dataKelas() {
-        if (!"Pilih . .".equals(cmbKelas.getSelectedItem().toString())) {
-            disableComboBox(true);
-        } else {
-            disableComboBox(false);
-        }
-    }
-
-    private void pilihKelas() {
-        kelasService = new KelasServiceImpl();
-        kelasList = kelasService.findAll();
-        cmbKelas.addItem("Pilih . .");
-        for (Kelas kelas : kelasList) {
-            cmbKelas.addItem(kelas.getNama_kelas());
-        }
-
-        if (siswaList != null) {
-            siswaList.clear();
-            model.removeAllSourceValues();
-            model.removeAllTargetValues();
-        }
-    }
-
-    private void pilihPembayaran() {
-        SiswaService siswaService = new SiswaServiceImpl();
-
-        if (null != cmbJenisPembayaran.getSelectedItem().toString()) {
-            switch (cmbJenisPembayaran.getSelectedItem().toString()) {
-                case "Angsuran":
-                    cmbPembayaran.removeAllItems();
-                    AngsuranService angsuranService = new AngsuranServiceImpl();
-                    angsuranList = angsuranService.findAll();
-                    for (Angsuran angsuran : angsuranList) {
-                        cmbPembayaran.addItem(angsuran.getNama());
-                    }
-
-                    if (siswaList != null) {
-                        siswaList.clear();
-                        model.removeAllSourceValues();
-                        model.removeAllTargetValues();
-                    }
-
-                    siswaList = siswaService.findAllByKelasAndAngsuran(cmbKelas.getSelectedItem().toString(), false);
-                    model = new DefaultDoubleListModel<>(String.class);
-                    for (Siswa siswa : siswaList) {
-                        model.add(siswa.getNama());
-                    }
-                    dblListSiswa.setModel(model);
-                    break;
-                case "Bulanan":
-
-                    cmbPembayaran.removeAllItems();
-                    BulananService bulananService = new BulananServiceImpl();
-                    bulananList = bulananService.findAll();
-                    for (Bulanan bulanan : bulananList) {
-                        cmbPembayaran.addItem(bulanan.getNama());
-                    }
-
-                    if (siswaList != null) {
-                        siswaList.clear();
-                        model.removeAllSourceValues();
-                        model.removeAllTargetValues();
-                    }
-
-                    siswaList = siswaService.findAllByKelasAndBulanan(cmbKelas.getSelectedItem().toString(), false);
-                    model = new DefaultDoubleListModel<>(String.class);
-                    for (Siswa siswa : siswaList) {
-                        model.add(siswa.getNama());
-                    }
-                    dblListSiswa.setModel(model);
-                    break;
-                case "Tunai":
-
-                    cmbPembayaran.removeAllItems();
-                    TunaiService tunaiService = new TunaiServiceImpl();
-                    tunaiList = tunaiService.findAll();
-                    for (Tunai tunai : tunaiList) {
-                        cmbPembayaran.addItem(tunai.getNama());
-                    }
-
-                    if (siswaList != null) {
-                        siswaList.clear();
-                        model.removeAllSourceValues();
-                        model.removeAllTargetValues();
-                    }
-
-                    siswaList = siswaService.findAllByKelasAndTunai(cmbKelas.getSelectedItem().toString(), false);
-                    model = new DefaultDoubleListModel<>(String.class);
-                    for (Siswa siswa : siswaList) {
-                        model.add(siswa.getNama());
-                    }
-                    dblListSiswa.setModel(model);
-                    break;
-            }
-        }
-    }
-
-    public void disableComboBox(Boolean expression) {
-        cmbPembayaran.setEnabled(expression);
-        cmbJenisPembayaran.setEnabled(expression);
-    }
-
-    private void simpanTarget() {
-        Collection<String> values = model.getValues();
-        SiswaService siswaService = new SiswaServiceImpl();
-        TagihanService tagihanService = new TagihanServiceImpl();
-        for (String nama : values) {
-            Siswa siswa = siswaService.findOneByName(nama);
-            this.setTitle(siswa.getId().toString());
-            TagihanSiswa tagihanSiswa = new TagihanSiswa();
-            tagihanSiswa.setNama(siswa.getNama());
-            tagihanSiswa.setNis(siswa.getNis());
-            tagihanSiswa.setKelas(siswa.getKelas());
-            tagihanSiswa.setTagihan(cmbPembayaran.getSelectedItem().toString());
-            siswa.setId(Long.valueOf(this.getTitle()));
-            if (cmbJenisPembayaran.getSelectedItem().toString() != null) {
-                switch (cmbJenisPembayaran.getSelectedItem().toString()) {
-                    case "Angsuran":
-                        siswa.setAngsuran(true);
-                        break;
-                    case "Bulanan":
-                        siswa.setBulanan(true);
-                        break;
-                    case "Tunai":
-                        siswa.setTunai(true);
-                        break;
-                }
-            }
-            siswaService.update(siswa);
-            tagihanService.save(tagihanSiswa);
-        }
-        model.removeAllTargetValues();
-        dblListSiswa.setModel(model);
     }
 
     /**
@@ -204,15 +141,27 @@ public class FrameBiling extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        dblListSiswa = new com.stripbandunk.jwidget.JDoubleList();
+        tabUtama = new javax.swing.JTabbedPane();
+        panelAngsuran = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        cmbAngsuranNamaTagihan = new javax.swing.JComboBox();
+        dblAngsuran = new com.stripbandunk.jwidget.JDoubleList();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        panelBulanan = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        cmbBulananNamaTagihan = new javax.swing.JComboBox();
+        dblBulanan = new com.stripbandunk.jwidget.JDoubleList();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        panelTunai = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        cmbTunaiNamaTagihan = new javax.swing.JComboBox();
+        jDoubleList1 = new com.stripbandunk.jwidget.JDoubleList();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        cmbJenisPembayaran = new javax.swing.JComboBox();
-        jLabel2 = new javax.swing.JLabel();
         cmbKelas = new javax.swing.JComboBox();
-        cmbPembayaran = new javax.swing.JComboBox();
 
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
@@ -232,140 +181,259 @@ public class FrameBiling extends javax.swing.JInternalFrame {
             }
         });
 
-        dblListSiswa.setButtonAddAllText("Tambah semua >>");
-        dblListSiswa.setButtonAddText("Tambah >");
-        dblListSiswa.setButtonRemoveAllText("<< Hapus semua ");
-        dblListSiswa.setButtonRemoveText("< Hapus");
+        tabUtama.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabUtamaStateChanged(evt);
+            }
+        });
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/folder_delete.gif"))); // NOI18N
-        jButton1.setText("Kosongkan");
-        jButton1.setPreferredSize(new java.awt.Dimension(120, 30));
+        jLabel2.setText("Pilih Nama Tagihan");
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/icon_accept.gif"))); // NOI18N
+        cmbAngsuranNamaTagihan.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbAngsuranNamaTagihanItemStateChanged(evt);
+            }
+        });
+
+        jButton1.setText("Keluar");
+        jButton1.setPreferredSize(new java.awt.Dimension(100, 30));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         jButton2.setText("Simpan");
-        jButton2.setPreferredSize(new java.awt.Dimension(120, 30));
+        jButton2.setPreferredSize(new java.awt.Dimension(100, 30));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/action_stop.gif"))); // NOI18N
+        javax.swing.GroupLayout panelAngsuranLayout = new javax.swing.GroupLayout(panelAngsuran);
+        panelAngsuran.setLayout(panelAngsuranLayout);
+        panelAngsuranLayout.setHorizontalGroup(
+            panelAngsuranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAngsuranLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelAngsuranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dblAngsuran, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelAngsuranLayout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbAngsuranNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 350, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAngsuranLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panelAngsuranLayout.setVerticalGroup(
+            panelAngsuranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAngsuranLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelAngsuranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(cmbAngsuranNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(dblAngsuran, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelAngsuranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        tabUtama.addTab("Angsuran", panelAngsuran);
+
+        jLabel4.setText("Pilih Nama Tagihan");
+
         jButton3.setText("Keluar");
-        jButton3.setPreferredSize(new java.awt.Dimension(120, 30));
+        jButton3.setPreferredSize(new java.awt.Dimension(100, 30));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("Jenis Pembayaran");
+        jButton4.setText("Simpan");
+        jButton4.setPreferredSize(new java.awt.Dimension(100, 30));
 
-        cmbJenisPembayaran.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pilih . .", "Angsuran", "Bulanan", "Tunai" }));
-        cmbJenisPembayaran.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cmbJenisPembayaranItemStateChanged(evt);
+        javax.swing.GroupLayout panelBulananLayout = new javax.swing.GroupLayout(panelBulanan);
+        panelBulanan.setLayout(panelBulananLayout);
+        panelBulananLayout.setHorizontalGroup(
+            panelBulananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBulananLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelBulananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dblBulanan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelBulananLayout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbBulananNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 350, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBulananLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panelBulananLayout.setVerticalGroup(
+            panelBulananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBulananLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelBulananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(cmbBulananNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(dblBulanan, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelBulananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        tabUtama.addTab("Bulanan", panelBulanan);
+
+        jLabel6.setText("Pilih Nama Tagihan");
+
+        jButton5.setText("Keluar");
+        jButton5.setPreferredSize(new java.awt.Dimension(100, 30));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Tentukan siswa berdasarkan kelas");
+        jButton6.setText("Simpan");
+        jButton6.setPreferredSize(new java.awt.Dimension(100, 30));
 
-        cmbKelas.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cmbKelasItemStateChanged(evt);
-            }
-        });
+        javax.swing.GroupLayout panelTunaiLayout = new javax.swing.GroupLayout(panelTunai);
+        panelTunai.setLayout(panelTunaiLayout);
+        panelTunaiLayout.setHorizontalGroup(
+            panelTunaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTunaiLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTunaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jDoubleList1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelTunaiLayout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbTunaiNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 350, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTunaiLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panelTunaiLayout.setVerticalGroup(
+            panelTunaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTunaiLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTunaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(cmbTunaiNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jDoubleList1, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelTunaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        tabUtama.addTab("Tunai", panelTunai);
+
+        jLabel1.setText("Pilih Kelas");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tabUtama)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(dblListSiswa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(224, 224, 224)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(cmbJenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(cmbJenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(dblListSiswa, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50))
+                .addComponent(jLabel1)
+                .addGap(12, 12, 12)
+                .addComponent(cmbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tabUtama, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        pilihKelas();
+    }//GEN-LAST:event_formInternalFrameOpened
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tabUtamaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabUtamaStateChanged
+        inputSiswa();
+    }//GEN-LAST:event_tabUtamaStateChanged
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        disableComboBox(false);
-        pilihKelas();
-    }//GEN-LAST:event_formInternalFrameOpened
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void cmbJenisPembayaranItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbJenisPembayaranItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
-            pilihPembayaran();
-        }
-    }//GEN-LAST:event_cmbJenisPembayaranItemStateChanged
+    private void cmbAngsuranNamaTagihanItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbAngsuranNamaTagihanItemStateChanged
+        pilihNamaTagihanAngsuran();
+    }//GEN-LAST:event_cmbAngsuranNamaTagihanItemStateChanged
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        simpanTarget();
+        simpanAngsuran();
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void cmbKelasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbKelasItemStateChanged
-        dataKelas();
-    }//GEN-LAST:event_cmbKelasItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox cmbJenisPembayaran;
+    private javax.swing.JComboBox cmbAngsuranNamaTagihan;
+    private javax.swing.JComboBox cmbBulananNamaTagihan;
     private javax.swing.JComboBox cmbKelas;
-    private javax.swing.JComboBox cmbPembayaran;
-    private com.stripbandunk.jwidget.JDoubleList dblListSiswa;
+    private javax.swing.JComboBox cmbTunaiNamaTagihan;
+    private com.stripbandunk.jwidget.JDoubleList dblAngsuran;
+    private com.stripbandunk.jwidget.JDoubleList dblBulanan;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private com.stripbandunk.jwidget.JDoubleList jDoubleList1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel panelAngsuran;
+    private javax.swing.JPanel panelBulanan;
+    private javax.swing.JPanel panelTunai;
+    private javax.swing.JTabbedPane tabUtama;
     // End of variables declaration//GEN-END:variables
 
 }

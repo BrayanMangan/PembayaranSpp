@@ -14,7 +14,6 @@ import com.yf.kp.service.impl.CountServiceImpl;
 import com.yf.kp.service.impl.KelasServiceImpl;
 import com.yf.kp.service.impl.SiswaServiceImpl;
 import com.yf.kp.utility.TableAutoColumnWidth;
-import com.yf.kp.utility.TextBehaviour;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -77,6 +76,59 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
         }
     }
 
+    private void clear() {
+        this.setTitle("");
+        txtNis.setText("");
+        txtNama.setText("");
+        txtTempatLahir.setText("");
+        txtAlamat.setText("");
+        txtNamaOrtu.setText("");
+        txtPekerjaanOrtu.setText("");
+        txtTelp.setText("");
+        txtAlamatOrtu.setText("");
+        dateTanggalLahir.setDate(null);
+        loadData();
+        jButton1.setText("Simpan");
+    }
+
+    private void delete() {
+        if (tableSiswa.getSelectedRow() != -1) {
+            int index = tableSiswa.convertRowIndexToModel(tableSiswa.getSelectedRow());
+            Siswa siswa = list.get(index);
+            if (JOptionPane.showConfirmDialog(this, "Are You Sure To Delete This Item?", "Delete Item", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                service = new SiswaServiceImpl();
+                service.delete(siswa.getId());
+                loadData();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Silahakan Pilih Data Terlebih Dahulu");
+        }
+    }
+
+    private void updateSiswa() {
+        if (tableSiswa.getSelectedRow() != -1) {
+            int index = tableSiswa.convertRowIndexToModel(tableSiswa.getSelectedRow());
+            Siswa siswa = list.get(index);
+            this.setTitle(siswa.getId().toString());
+            txtNis.setText(siswa.getNis());
+            txtNama.setText(siswa.getNama());
+            cmbKelas.setSelectedItem(siswa.getKelas());
+            cmbJenisKelamin.setSelectedItem(siswa.getJenis_kelamin());
+            txtTempatLahir.setText(siswa.getTempat_lahir());
+            dateTanggalLahir.setDate(siswa.getTgl_lahir());
+            cmbAgama.setSelectedItem(siswa.getAgama());
+            txtAlamat.setText(siswa.getAlamat());
+            txtNamaOrtu.setText(siswa.getNama_ortu());
+            cmbAgamaOrtu.setSelectedItem(siswa.getAgama_ortu());
+            txtPekerjaanOrtu.setText(siswa.getPekerjaan());
+            txtTelp.setText(siswa.getTelp());
+            txtAlamatOrtu.setText(siswa.getAlamat_ortu());
+            jButton1.setText("Update");
+        } else {
+            JOptionPane.showMessageDialog(this, "Silahakan Pilih Data Terlebih Dahulu");
+        }
+    }
+
     public void cbBaris() {
         cmbBanyakBaris.addItem("10");
         cmbBanyakBaris.addItem("20");
@@ -125,6 +177,87 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
         tableModel.setList(list);
         tableSiswa.setModel(tableModel);
         TableAutoColumnWidth tableAutoColumnWidth = new TableAutoColumnWidth(tableSiswa);
+    }
+
+    private void save() {
+        if (txtNis.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nis Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else if (txtNama.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else if (txtTempatLahir.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tempat Lahir Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else if (dateTanggalLahir.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Tanggal Lahir Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else if (txtAlamat.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Alamat Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else if (txtNamaOrtu.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama Orang Tua Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else if (txtPekerjaanOrtu.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pekerjaan Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else if (txtTelp.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Telepon Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else if (txtAlamatOrtu.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Alamat Orang Tua Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            service = new SiswaServiceImpl();
+            model = new Siswa();
+            if ("Update".equals(jButton1.getText())) {
+                model.setId(Long.valueOf(this.getTitle()));
+                model.setNis(txtNis.getText());
+                model.setNama(txtNama.getText());
+                model.setKelas(cmbKelas.getSelectedItem().toString());
+                model.setJenis_kelamin(cmbJenisKelamin.getSelectedItem().toString());
+                model.setTempat_lahir(txtTempatLahir.getText());
+                model.setTgl_lahir(dateTanggalLahir.getDate());
+                model.setAgama(cmbAgama.getSelectedItem().toString());
+                model.setAlamat(txtAlamat.getText());
+                model.setNama_ortu(txtNamaOrtu.getText());
+                model.setAgama_ortu(cmbAgamaOrtu.getSelectedItem().toString());
+                model.setPekerjaan(txtPekerjaanOrtu.getText());
+                model.setTelp(txtTelp.getText());
+                model.setAlamat_ortu(txtAlamatOrtu.getText());
+                service.update(model);
+                loadData();
+                jButton1.setText("Simpan");
+
+                this.setTitle("");
+                txtNis.setText("");
+                txtNama.setText("");
+                txtTempatLahir.setText("");
+                txtAlamat.setText("");
+                txtNamaOrtu.setText("");
+                txtPekerjaanOrtu.setText("");
+                txtTelp.setText("");
+                txtAlamatOrtu.setText("");
+                dateTanggalLahir.setDate(null);
+            } else {
+                model.setNis(txtNis.getText());
+                model.setNama(txtNama.getText());
+                model.setKelas(cmbKelas.getSelectedItem().toString());
+                model.setJenis_kelamin(cmbJenisKelamin.getSelectedItem().toString());
+                model.setTempat_lahir(txtTempatLahir.getText());
+                model.setTgl_lahir(dateTanggalLahir.getDate());
+                model.setAgama(cmbAgama.getSelectedItem().toString());
+                model.setAlamat(txtAlamat.getText());
+                model.setNama_ortu(txtNamaOrtu.getText());
+                model.setAgama_ortu(cmbAgamaOrtu.getSelectedItem().toString());
+                model.setPekerjaan(txtPekerjaanOrtu.getText());
+                model.setTelp(txtTelp.getText());
+                model.setAlamat_ortu(txtAlamatOrtu.getText());
+                service.save(model);
+                loadData();
+                this.setTitle("");
+                txtNis.setText("");
+                txtNama.setText("");
+                txtTempatLahir.setText("");
+                txtAlamat.setText("");
+                txtNamaOrtu.setText("");
+                txtPekerjaanOrtu.setText("");
+                txtTelp.setText("");
+                txtAlamatOrtu.setText("");
+                dateTanggalLahir.setDate(null);
+            }
+        }
     }
 
     /**
@@ -588,85 +721,7 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (txtNis.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nis Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
-        } else if (txtNama.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nama Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
-        } else if (txtTempatLahir.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Tempat Lahir Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
-        } else if (dateTanggalLahir.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Tanggal Lahir Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
-        } else if (txtAlamat.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Alamat Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
-        } else if (txtNamaOrtu.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nama Orang Tua Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
-        } else if (txtPekerjaanOrtu.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Pekerjaan Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
-        } else if (txtTelp.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Telepon Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
-        } else if (txtAlamatOrtu.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Alamat Orang Tua Masih Kosong", "Info", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            service = new SiswaServiceImpl();
-            model = new Siswa();
-            if ("Update".equals(jButton1.getText())) {
-                model.setId(Long.valueOf(this.getTitle()));
-                model.setNis(txtNis.getText());
-                model.setNama(txtNama.getText());
-                model.setKelas(cmbKelas.getSelectedItem().toString());
-                model.setJenis_kelamin(cmbJenisKelamin.getSelectedItem().toString());
-                model.setTempat_lahir(txtTempatLahir.getText());
-                model.setTgl_lahir(dateTanggalLahir.getDate());
-                model.setAgama(cmbAgama.getSelectedItem().toString());
-                model.setAlamat(txtAlamat.getText());
-                model.setNama_ortu(txtNamaOrtu.getText());
-                model.setAgama_ortu(cmbAgamaOrtu.getSelectedItem().toString());
-                model.setPekerjaan(txtPekerjaanOrtu.getText());
-                model.setTelp(txtTelp.getText());
-                model.setAlamat_ortu(txtAlamatOrtu.getText());
-                service.update(model);
-                loadData();
-                jButton1.setText("Simpan");
-
-                this.setTitle("");
-                txtNis.setText("");
-                txtNama.setText("");
-                txtTempatLahir.setText("");
-                txtAlamat.setText("");
-                txtNamaOrtu.setText("");
-                txtPekerjaanOrtu.setText("");
-                txtTelp.setText("");
-                txtAlamatOrtu.setText("");
-            } else {
-                model.setNis(txtNis.getText());
-                model.setNama(txtNama.getText());
-                model.setKelas(cmbKelas.getSelectedItem().toString());
-                model.setJenis_kelamin(cmbJenisKelamin.getSelectedItem().toString());
-                model.setTempat_lahir(txtTempatLahir.getText());
-                model.setTgl_lahir(dateTanggalLahir.getDate());
-                model.setAgama(cmbAgama.getSelectedItem().toString());
-                model.setAlamat(txtAlamat.getText());
-                model.setNama_ortu(txtNamaOrtu.getText());
-                model.setAgama_ortu(cmbAgamaOrtu.getSelectedItem().toString());
-                model.setPekerjaan(txtPekerjaanOrtu.getText());
-                model.setTelp(txtTelp.getText());
-                model.setAlamat_ortu(txtAlamatOrtu.getText());
-                model.setAngsuran(false);
-                model.setBulanan(false);
-                model.setTunai(false);
-                service.save(model);
-                loadData();
-                this.setTitle("");
-                txtNis.setText("");
-                txtNama.setText("");
-                txtTempatLahir.setText("");
-                txtAlamat.setText("");
-                txtNamaOrtu.setText("");
-                txtPekerjaanOrtu.setText("");
-                txtTelp.setText("");
-                txtAlamatOrtu.setText("");
-            }
-        }
+        save();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
@@ -676,55 +731,15 @@ public class FrameSiswa extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        if (tableSiswa.getSelectedRow() != -1) {
-            int index = tableSiswa.convertRowIndexToModel(tableSiswa.getSelectedRow());
-            Siswa siswa = list.get(index);
-            if (JOptionPane.showConfirmDialog(this, "Are You Sure To Delete This Item?", "Delete Item", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                service = new SiswaServiceImpl();
-                service.delete(siswa.getId());
-                loadData();
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Silahakan Pilih Data Terlebih Dahulu");
-        }
+        delete();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if (tableSiswa.getSelectedRow() != -1) {
-            int index = tableSiswa.convertRowIndexToModel(tableSiswa.getSelectedRow());
-            Siswa siswa = list.get(index);
-            this.setTitle(siswa.getId().toString());
-            txtNis.setText(siswa.getNis().toString());
-            txtNama.setText(siswa.getNama());
-            cmbKelas.setSelectedItem(siswa.getKelas());
-            cmbJenisKelamin.setSelectedItem(siswa.getJenis_kelamin());
-            txtTempatLahir.setText(siswa.getTempat_lahir());
-            dateTanggalLahir.setDate(siswa.getTgl_lahir());
-            cmbAgama.setSelectedItem(siswa.getAgama());
-            txtAlamat.setText(siswa.getAlamat());
-            txtNamaOrtu.setText(siswa.getNama_ortu());
-            cmbAgamaOrtu.setSelectedItem(siswa.getAgama_ortu());
-            txtPekerjaanOrtu.setText(siswa.getPekerjaan());
-            txtTelp.setText(siswa.getTelp());
-            txtAlamatOrtu.setText(siswa.getAlamat_ortu());
-            jButton1.setText("Update");
-        } else {
-            JOptionPane.showMessageDialog(this, "Silahakan Pilih Data Terlebih Dahulu");
-        }
+        updateSiswa();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        this.setTitle("");
-        txtNis.setText("");
-        txtNama.setText("");
-        txtTempatLahir.setText("");
-        txtAlamat.setText("");
-        txtNamaOrtu.setText("");
-        txtPekerjaanOrtu.setText("");
-        txtTelp.setText("");
-        txtAlamatOrtu.setText("");
-        loadData();
-        jButton1.setText("Simpan");
+        clear();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void txtCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCariKeyReleased

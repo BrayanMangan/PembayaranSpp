@@ -9,7 +9,7 @@ import javax.persistence.Table;
  * @author anonymous
  */
 @Entity
-@Table(name = "kelas")
+@Table(name = "master_kelas")
 public class Kelas extends BaseModel {
 
     private String nama_kelas;

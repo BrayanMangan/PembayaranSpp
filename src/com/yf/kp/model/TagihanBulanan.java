@@ -25,13 +25,14 @@ import javax.persistence.Table;
  * @author anonymous
  */
 @Entity
-@Table(name = "tagihan_siswa")
-public class TagihanSiswa extends BaseModel {
+@Table(name = "tagihan_bulanan")
+public class TagihanBulanan extends BaseModel {
 
     private String nis;
     private String nama;
     private String kelas;
-    private String tagihan;
+    private String namaTagihan;
+    private String kategori;
 
     public String getNis() {
         return nis;
@@ -57,12 +58,20 @@ public class TagihanSiswa extends BaseModel {
         this.kelas = kelas;
     }
 
-    public String getTagihan() {
-        return tagihan;
+    public String getNamaTagihan() {
+        return namaTagihan;
     }
 
-    public void setTagihan(String tagihan) {
-        this.tagihan = tagihan;
+    public void setNamaTagihan(String namaTagihan) {
+        this.namaTagihan = namaTagihan;
+    }
+
+    public String getKategori() {
+        return kategori;
+    }
+
+    public void setKategori(String kategori) {
+        this.kategori = kategori;
     }
 
 }
