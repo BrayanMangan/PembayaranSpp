@@ -52,4 +52,56 @@ public class TagihanAngsuranServiceImpl extends AbstractServiceImpl<TagihanAngsu
         }
     }
 
+    @Override
+    public List<TagihanAngsuran> findAllByNis(String nis) {
+        List<TagihanAngsuran> list = new ArrayList<>();
+        connect();
+        try {
+            Query q = manager().createQuery("SELECT TA FROM TagihanAngsuran TA WHERE TA.nis = :nis");
+            q.setParameter("nis", nis);
+            list = q.list();
+            commit();
+        } catch (HibernateException e) {
+            rollback();
+        } finally {
+            close();
+        }
+        return list;
+    }
+
+    @Override
+    public List<TagihanAngsuran> findAllByNama(String nama) {
+        List<TagihanAngsuran> list = new ArrayList<>();
+        connect();
+        try {
+            Query q = manager().createQuery("SELECT TA FROM TagihanAngsuran TA WHERE TA.nama LIKE :nama");
+            q.setParameter("nama", "%" + nama + "%");
+            list = q.list();
+            commit();
+        } catch (HibernateException e) {
+            rollback();
+        } finally {
+            close();
+        }
+        return list;
+    }
+
+    @Override
+    public TagihanAngsuran findOneByNisAndNamaTagihan(String nis, String namaTagihan) {
+        TagihanAngsuran angsuran = new TagihanAngsuran();
+        connect();
+        try {
+            Query q = manager().createQuery("SELECT TA FROM TagihanAngsuran TA WHERE TA.nis =:nis AND TA.namaTagihan =:namaTagihan");
+            q.setParameter("nis", nis);
+            q.setParameter("namaTagihan", namaTagihan);
+            angsuran = (TagihanAngsuran) q.uniqueResult();
+            commit();
+        } catch (HibernateException e) {
+            rollback();
+        } finally {
+            close();
+        }
+        return angsuran;
+    }
+
 }

@@ -17,6 +17,7 @@
 package com.yf.kp.service;
 
 import com.yf.kp.model.TagihanAngsuran;
+import java.util.List;
 
 /**
  *
@@ -25,4 +26,10 @@ import com.yf.kp.model.TagihanAngsuran;
 public interface TagihanAngsuranService extends AbstractService<TagihanAngsuran> {
 
     public void saveBatch(TagihanAngsuran tagihanAngsuran, String nama);
+
+    public List<TagihanAngsuran> findAllByNis(String nis);
+
+    public List<TagihanAngsuran> findAllByNama(String nama);
+
+    public TagihanAngsuran findOneByNisAndNamaTagihan(String text, String namaTagihan);
 }

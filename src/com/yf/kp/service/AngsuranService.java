@@ -24,5 +24,7 @@ import com.yf.kp.model.Angsuran;
  * @author anonymous
  */
 public interface AngsuranService extends AbstractService<Angsuran>{
+
+    public Angsuran findOneByName(String toString);
     
 }

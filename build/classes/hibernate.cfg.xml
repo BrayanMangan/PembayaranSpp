@@ -29,6 +29,7 @@
         <!-- disable second-level cache -->
         <property name="hibernate.cache.use_second_level_cache">false</property>
 
+        <mapping class="com.yf.kp.model.User"/>
         <mapping class="com.yf.kp.model.Kelas"/>
         <mapping class="com.yf.kp.model.Siswa"/>
         <mapping class="com.yf.kp.model.base.BaseModel"/>
@@ -38,5 +39,6 @@
         <mapping class="com.yf.kp.model.TagihanAngsuran"/>
         <mapping class="com.yf.kp.model.TagihanBulanan"/>
         <mapping class="com.yf.kp.model.TagihanTunai"/>
+        <mapping class="com.yf.kp.model.LaporanAngsuran"/>
     </session-factory>
 </hibernate-configuration>

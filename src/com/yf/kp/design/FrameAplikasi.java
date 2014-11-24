@@ -1,10 +1,10 @@
 package com.yf.kp.design;
 
 import com.yf.kp.design.billing.FrameBiling;
-import com.yf.kp.design.transaksi.FrameTransaksi;
 import com.yf.kp.design.jenispembayaran.FrameJenisPembayaran;
 import com.yf.kp.design.siswa.FrameSiswa;
 import com.yf.kp.design.kelas.FrameKelas;
+import com.yf.kp.design.transaksi.FrameTransaksi;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -241,10 +241,10 @@ public class FrameAplikasi extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jmiTransaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiTransaksiActionPerformed
-        FrameTransaksi Ft = new FrameTransaksi();
-        Ft.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
-        customDesktopPane1.add(Ft);
-        Ft.setVisible(true);
+        FrameTransaksi ft = new FrameTransaksi();
+        ft.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
+        customDesktopPane1.add(ft);
+        ft.setVisible(true);
     }//GEN-LAST:event_jmiTransaksiActionPerformed
 
     private void jButtonMenuDataSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuDataSiswaActionPerformed
@@ -293,7 +293,7 @@ public class FrameAplikasi extends javax.swing.JFrame {
     }//GEN-LAST:event_jmiDataSiswaActionPerformed
 
     private void jmiPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiPembayaranActionPerformed
-        
+
     }//GEN-LAST:event_jmiPembayaranActionPerformed
 
     /**

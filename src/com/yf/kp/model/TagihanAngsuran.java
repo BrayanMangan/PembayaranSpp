@@ -33,6 +33,8 @@ public class TagihanAngsuran extends BaseModel {
     private String kelas;
     private String namaTagihan;
     private String kategori;
+    private Integer kaliBayar;
+    private Double jumlah;
 
     public String getNis() {
         return nis;
@@ -72,5 +74,21 @@ public class TagihanAngsuran extends BaseModel {
 
     public void setKategori(String kategori) {
         this.kategori = kategori;
+    }
+
+    public Integer getKaliBayar() {
+        return kaliBayar;
+    }
+
+    public void setKaliBayar(Integer kaliBayar) {
+        this.kaliBayar = kaliBayar;
+    }
+
+    public Double getJumlah() {
+        return jumlah;
+    }
+
+    public void setJumlah(Double jumlah) {
+        this.jumlah = jumlah;
     }
 }

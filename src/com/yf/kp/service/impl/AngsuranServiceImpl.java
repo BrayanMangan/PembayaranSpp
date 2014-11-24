@@ -18,6 +18,8 @@ package com.yf.kp.service.impl;
 
 import com.yf.kp.model.Angsuran;
 import com.yf.kp.service.AngsuranService;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
 
 /**
  *
@@ -27,6 +29,23 @@ public class AngsuranServiceImpl extends AbstractServiceImpl<Angsuran> implement
 
     public AngsuranServiceImpl() {
         super(Angsuran.class);
+    }
+
+    @Override
+    public Angsuran findOneByName(String nama) {
+        Angsuran angsuran = new Angsuran();
+        connect();
+        try {
+            Query q = manager().createQuery("SELECT A FROM Angsuran A WHERE A.nama = :kode");
+            q.setParameter("kode", nama);
+            angsuran = (Angsuran) q.uniqueResult();
+            commit();
+        } catch (HibernateException e) {
+            rollback();
+        } finally {
+            close();
+        }
+        return angsuran;
     }
 
 }

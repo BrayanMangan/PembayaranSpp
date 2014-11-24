@@ -95,12 +95,18 @@ public class FrameBiling extends javax.swing.JInternalFrame {
         dblModel = new DefaultDoubleListModel<>(String.class);
         if (!"Pilih".equals(cmbAngsuranNamaTagihan.getSelectedItem().toString())) {
             siswaService = new SiswaServiceImpl();
+            AngsuranService angsuranService = new AngsuranServiceImpl();
+            Angsuran angsuran = angsuranService.findOneByName(cmbAngsuranNamaTagihan.getSelectedItem().toString());
+            txtAngsuranJumlah.setText(angsuran.getJumlah().toString());
+            txtAngsuranKaliBayar.setText(angsuran.getKaliBayar().toString());
             listSiswa = siswaService.findAllByKelas(cmbKelas.getSelectedItem().toString());
             for (Siswa siswa : listSiswa) {
                 dblModel.add(siswa.getNama());
             }
             dblAngsuran.setModel(dblModel);
         } else {
+            txtAngsuranJumlah.setText("");
+            txtAngsuranKaliBayar.setText("");
             dblModel.removeAllSourceValues();
             dblModel.removeAllTargetValues();
             dblAngsuran.setModel(dblModel);
@@ -119,6 +125,8 @@ public class FrameBiling extends javax.swing.JInternalFrame {
             tagihanAngsuran.setKelas(cmbKelas.getSelectedItem().toString());
             tagihanAngsuran.setNamaTagihan(cmbAngsuranNamaTagihan.getSelectedItem().toString());
             tagihanAngsuran.setKategori("Angsuran");
+            tagihanAngsuran.setJumlah(Double.valueOf(txtAngsuranJumlah.getText()));
+            tagihanAngsuran.setKaliBayar(Integer.valueOf(txtAngsuranKaliBayar.getText()));
             tagihanAngsuranService.saveBatch(tagihanAngsuran, nama);
         }
         dblModel.removeAllTargetValues();
@@ -148,6 +156,8 @@ public class FrameBiling extends javax.swing.JInternalFrame {
         dblAngsuran = new com.stripbandunk.jwidget.JDoubleList();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        txtAngsuranJumlah = new javax.swing.JTextField();
+        txtAngsuranKaliBayar = new javax.swing.JTextField();
         panelBulanan = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         cmbBulananNamaTagihan = new javax.swing.JComboBox();
@@ -211,6 +221,10 @@ public class FrameBiling extends javax.swing.JInternalFrame {
             }
         });
 
+        txtAngsuranJumlah.setEnabled(false);
+
+        txtAngsuranKaliBayar.setEnabled(false);
+
         javax.swing.GroupLayout panelAngsuranLayout = new javax.swing.GroupLayout(panelAngsuran);
         panelAngsuran.setLayout(panelAngsuranLayout);
         panelAngsuranLayout.setHorizontalGroup(
@@ -223,7 +237,11 @@ public class FrameBiling extends javax.swing.JInternalFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbAngsuranNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 350, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtAngsuranJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtAngsuranKaliBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 65, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAngsuranLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -237,7 +255,9 @@ public class FrameBiling extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(panelAngsuranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(cmbAngsuranNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbAngsuranNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAngsuranJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAngsuranKaliBayar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(dblAngsuran, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -434,6 +454,8 @@ public class FrameBiling extends javax.swing.JInternalFrame {
     private javax.swing.JPanel panelBulanan;
     private javax.swing.JPanel panelTunai;
     private javax.swing.JTabbedPane tabUtama;
+    private javax.swing.JTextField txtAngsuranJumlah;
+    private javax.swing.JTextField txtAngsuranKaliBayar;
     // End of variables declaration//GEN-END:variables
 
 }
