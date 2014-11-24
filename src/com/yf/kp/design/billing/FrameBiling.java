@@ -22,19 +22,23 @@ import com.yf.kp.model.Bulanan;
 import com.yf.kp.model.Kelas;
 import com.yf.kp.model.Siswa;
 import com.yf.kp.model.TagihanAngsuran;
+import com.yf.kp.model.TagihanTunai;
 import com.yf.kp.model.Tunai;
 import com.yf.kp.service.AngsuranService;
 import com.yf.kp.service.BulananService;
 import com.yf.kp.service.KelasService;
 import com.yf.kp.service.SiswaService;
 import com.yf.kp.service.TagihanAngsuranService;
+import com.yf.kp.service.TagihanTunaiService;
 import com.yf.kp.service.TunaiService;
 import com.yf.kp.service.impl.AngsuranServiceImpl;
 import com.yf.kp.service.impl.BulananServiceImpl;
 import com.yf.kp.service.impl.KelasServiceImpl;
 import com.yf.kp.service.impl.SiswaServiceImpl;
 import com.yf.kp.service.impl.TagihanAngsuranServiceImpl;
+import com.yf.kp.service.impl.TagihanTunaiServiceImpl;
 import com.yf.kp.service.impl.TunaiServiceImpl;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -71,7 +75,7 @@ public class FrameBiling extends javax.swing.JInternalFrame {
             }
         } else if (tabUtama.getSelectedIndex() == 1) {
             cmbBulananNamaTagihan.removeAllItems();
-            cmbAngsuranNamaTagihan.addItem("Pilih");
+            cmbBulananNamaTagihan.addItem("Pilih");
             BulananService bulananService = new BulananServiceImpl();
             List<Bulanan> listBulanan = bulananService.findAll();
             for (Bulanan bulanan : listBulanan) {
@@ -79,7 +83,7 @@ public class FrameBiling extends javax.swing.JInternalFrame {
             }
         } else if (tabUtama.getSelectedIndex() == 2) {
             cmbTunaiNamaTagihan.removeAllItems();
-            cmbAngsuranNamaTagihan.addItem("Pilih");
+            cmbTunaiNamaTagihan.addItem("Pilih");
             TunaiService tunaiService = new TunaiServiceImpl();
             List<Tunai> listTunai = tunaiService.findAll();
             for (Tunai tunai : listTunai) {
@@ -117,6 +121,7 @@ public class FrameBiling extends javax.swing.JInternalFrame {
         Collection<String> values = dblModel.getValues();
         siswaService = new SiswaServiceImpl();
         TagihanAngsuranService tagihanAngsuranService = new TagihanAngsuranServiceImpl();
+        List<String> listNamaSiswa = new ArrayList<>();
         for (String nama : values) {
             Siswa siswa = siswaService.findOneByName(nama);
             TagihanAngsuran tagihanAngsuran = new TagihanAngsuran();
@@ -127,10 +132,59 @@ public class FrameBiling extends javax.swing.JInternalFrame {
             tagihanAngsuran.setKategori("Angsuran");
             tagihanAngsuran.setJumlah(Double.valueOf(txtAngsuranJumlah.getText()));
             tagihanAngsuran.setKaliBayar(Integer.valueOf(txtAngsuranKaliBayar.getText()));
-            tagihanAngsuranService.saveBatch(tagihanAngsuran, nama);
+            for (String namaSiswa : values) {
+                listNamaSiswa.add(namaSiswa);
+            }
+            tagihanAngsuranService.saveBatch(tagihanAngsuran, listNamaSiswa);
         }
         dblModel.removeAllTargetValues();
         dblAngsuran.setModel(dblModel);
+    }
+
+    /*
+     * Tab Tunai
+     */
+    private void pilihTunaiNamaTagihan() {
+        dblModel = new DefaultDoubleListModel<>(String.class);
+        if (!"Pilih".equals(cmbTunaiNamaTagihan.getSelectedItem().toString())) {
+            siswaService = new SiswaServiceImpl();
+            TunaiService tunaiService = new TunaiServiceImpl();
+            Tunai tunai = tunaiService.findOneByName(cmbTunaiNamaTagihan.getSelectedItem().toString());
+            txtTunaiJumlah.setText(tunai.getJumlah().toString());
+            listSiswa = siswaService.findAllByKelas(cmbKelas.getSelectedItem().toString());
+            for (Siswa siswa : listSiswa) {
+                dblModel.add(siswa.getNama());
+            }
+            dblTunai.setModel(dblModel);
+        } else {
+            txtTunaiJumlah.setText("");
+            dblModel.removeAllSourceValues();
+            dblModel.removeAllTargetValues();
+            dblTunai.setModel(dblModel);
+        }
+    }
+
+    private void simpanTunai() {
+        Collection<String> values = dblModel.getValues();
+        siswaService = new SiswaServiceImpl();
+        TagihanTunaiService tagihanTunaiService = new TagihanTunaiServiceImpl();
+        List<String> listNamaSiswa = new ArrayList<>();
+        for (String nama : values) {
+            Siswa siswa = siswaService.findOneByName(nama);
+            TagihanTunai tagihanTunai = new TagihanTunai();
+            tagihanTunai.setNis(siswa.getNis());
+            tagihanTunai.setNama(siswa.getNama());
+            tagihanTunai.setKelas(cmbKelas.getSelectedItem().toString());
+            tagihanTunai.setNamaTagihan(cmbTunaiNamaTagihan.getSelectedItem().toString());
+            tagihanTunai.setKategori("Tunai");
+            tagihanTunai.setJumlah(Double.valueOf(txtTunaiJumlah.getText()));
+            for (String namaSiswa : values) {
+                listNamaSiswa.add(namaSiswa);
+            }
+            tagihanTunaiService.saveBatch(tagihanTunai, listNamaSiswa);
+        }
+        dblModel.removeAllTargetValues();
+        dblTunai.setModel(dblModel);
     }
 
     /**
@@ -167,9 +221,10 @@ public class FrameBiling extends javax.swing.JInternalFrame {
         panelTunai = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         cmbTunaiNamaTagihan = new javax.swing.JComboBox();
-        jDoubleList1 = new com.stripbandunk.jwidget.JDoubleList();
+        dblTunai = new com.stripbandunk.jwidget.JDoubleList();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        txtTunaiJumlah = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         cmbKelas = new javax.swing.JComboBox();
 
@@ -322,6 +377,12 @@ public class FrameBiling extends javax.swing.JInternalFrame {
 
         jLabel6.setText("Pilih Nama Tagihan");
 
+        cmbTunaiNamaTagihan.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbTunaiNamaTagihanItemStateChanged(evt);
+            }
+        });
+
         jButton5.setText("Keluar");
         jButton5.setPreferredSize(new java.awt.Dimension(100, 30));
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -332,6 +393,13 @@ public class FrameBiling extends javax.swing.JInternalFrame {
 
         jButton6.setText("Simpan");
         jButton6.setPreferredSize(new java.awt.Dimension(100, 30));
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        txtTunaiJumlah.setEnabled(false);
 
         javax.swing.GroupLayout panelTunaiLayout = new javax.swing.GroupLayout(panelTunai);
         panelTunai.setLayout(panelTunaiLayout);
@@ -340,12 +408,14 @@ public class FrameBiling extends javax.swing.JInternalFrame {
             .addGroup(panelTunaiLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelTunaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jDoubleList1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dblTunai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelTunaiLayout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbTunaiNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 350, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTunaiJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 181, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTunaiLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -359,9 +429,10 @@ public class FrameBiling extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(panelTunaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(cmbTunaiNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbTunaiNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTunaiJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jDoubleList1, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                .addComponent(dblTunai, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelTunaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -431,6 +502,14 @@ public class FrameBiling extends javax.swing.JInternalFrame {
         simpanAngsuran();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void cmbTunaiNamaTagihanItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbTunaiNamaTagihanItemStateChanged
+        pilihTunaiNamaTagihan();
+    }//GEN-LAST:event_cmbTunaiNamaTagihanItemStateChanged
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        simpanTunai();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cmbAngsuranNamaTagihan;
@@ -439,13 +518,13 @@ public class FrameBiling extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox cmbTunaiNamaTagihan;
     private com.stripbandunk.jwidget.JDoubleList dblAngsuran;
     private com.stripbandunk.jwidget.JDoubleList dblBulanan;
+    private com.stripbandunk.jwidget.JDoubleList dblTunai;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private com.stripbandunk.jwidget.JDoubleList jDoubleList1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -456,6 +535,7 @@ public class FrameBiling extends javax.swing.JInternalFrame {
     private javax.swing.JTabbedPane tabUtama;
     private javax.swing.JTextField txtAngsuranJumlah;
     private javax.swing.JTextField txtAngsuranKaliBayar;
+    private javax.swing.JTextField txtTunaiJumlah;
     // End of variables declaration//GEN-END:variables
 
 }

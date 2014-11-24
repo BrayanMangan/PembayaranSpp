@@ -14,17 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.yf.kp.service;
 
-import com.yf.kp.model.Tunai;
+import com.yf.kp.model.LaporanTunai;
 
 /**
  *
  * @author anonymous
  */
-public interface TunaiService extends AbstractService<Tunai>{
+public interface LaporanTunaiService extends AbstractService<LaporanTunai> {
 
-    public Tunai findOneByName(String toString);
-    
 }

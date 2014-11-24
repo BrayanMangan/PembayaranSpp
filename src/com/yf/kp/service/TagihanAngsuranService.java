@@ -25,7 +25,7 @@ import java.util.List;
  */
 public interface TagihanAngsuranService extends AbstractService<TagihanAngsuran> {
 
-    public void saveBatch(TagihanAngsuran tagihanAngsuran, String nama);
+    public void saveBatch(TagihanAngsuran tagihanAngsuran, List<String> listSiswa);
 
     public List<TagihanAngsuran> findAllByNis(String nis);
 

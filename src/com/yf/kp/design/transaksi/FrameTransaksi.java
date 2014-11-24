@@ -1,15 +1,20 @@
 package com.yf.kp.design.transaksi;
 
 import com.yf.kp.design.transaksi.tablemodel.TagihanAngsuranTableModel;
+import com.yf.kp.design.transaksi.tablemodel.TagihanTunaiTableModel;
 import com.yf.kp.model.LaporanAngsuran;
+import com.yf.kp.model.LaporanTunai;
 import com.yf.kp.model.TagihanAngsuran;
+import com.yf.kp.model.TagihanTunai;
 import com.yf.kp.service.LaporanAngsuranService;
+import com.yf.kp.service.LaporanTunaiService;
 import com.yf.kp.service.TagihanAngsuranService;
+import com.yf.kp.service.TagihanTunaiService;
 import com.yf.kp.service.impl.LaporanAngsuranServiceImpl;
+import com.yf.kp.service.impl.LaporanTunaiServiceImpl;
 import com.yf.kp.service.impl.TagihanAngsuranServiceImpl;
+import com.yf.kp.service.impl.TagihanTunaiServiceImpl;
 import com.yf.kp.utility.TableAutoColumnWidth;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -22,6 +27,7 @@ import javax.swing.event.ListSelectionListener;
 public class FrameTransaksi extends javax.swing.JInternalFrame {
 
     private TagihanAngsuranTableModel tagihanAngsuranTableModel;
+    private TagihanTunaiTableModel tagihanTunaiTableModel;
 
     /**
      * Creates new form FrameTransaksi
@@ -30,7 +36,7 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
         initComponents();
     }
 
-    private void cariNis() {
+    private void cariNisAngsuran() {
         if (txtAngsuranNis.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Nis Siswa Masih Kosong");
         } else {
@@ -46,11 +52,11 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
             tagihanAngsuranTableModel.setList(list);
             tblAngsuran.setModel(tagihanAngsuranTableModel);
             TableAutoColumnWidth tableAutoColumnWidth = new TableAutoColumnWidth(tblAngsuran);
-            pilihDataTable();
+            pilihDataTableAngsuran();
         }
     }
 
-    private void cariNama() {
+    private void cariNamaAngsuran() {
         if (txtAngsuranNama.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Nama Siswa Masih Kosong");
         } else {
@@ -66,51 +72,55 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
             tagihanAngsuranTableModel.setList(list);
             tblAngsuran.setModel(tagihanAngsuranTableModel);
             TableAutoColumnWidth tableAutoColumnWidth = new TableAutoColumnWidth(tblAngsuran);
-            pilihDataTable();
+            pilihDataTableAngsuran();
         }
     }
 
-    private void pilihDataTable() {
-        btnAngsuranSimpan.setEnabled(false);
-        tblAngsuran.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+    private void pilihDataTableAngsuran() {
+        if (jTabbedPane1.getSelectedIndex() == 0) {
+            btnAngsuranSimpan.setEnabled(false);
+            tblAngsuran.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (tblAngsuran.getSelectedRow() != -1) {
-                    cmbAngsuranJumlah.removeAllItems();
-                    int index = tblAngsuran.getSelectedRow();
-                    String namaTagihan = (String) tagihanAngsuranTableModel.getValueAt(index, 1);
-                    Double jumlah = (Double) tagihanAngsuranTableModel.getValueAt(index, 2);
-                    Integer kaliBayar = (Integer) tagihanAngsuranTableModel.getValueAt(index, 3);
-                    txtAngsuranNamaPembayaran.setText(namaTagihan);
-                    txtAngsuranNominal.setText(jumlah.toString());
-                    for (int i = 1; i <= kaliBayar; i++) {
-                        cmbAngsuranJumlah.addItem(i);
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
+                    if (tblAngsuran.getSelectedRow() != -1) {
+                        cmbAngsuranJumlah.removeAllItems();
+                        int index = tblAngsuran.getSelectedRow();
+                        String namaTagihan = (String) tagihanAngsuranTableModel.getValueAt(index, 1);
+                        Double jumlah = (Double) tagihanAngsuranTableModel.getValueAt(index, 2);
+                        Integer kaliBayar = (Integer) tagihanAngsuranTableModel.getValueAt(index, 3);
+                        txtAngsuranNamaPembayaran.setText(namaTagihan);
+                        txtAngsuranNominal.setText(jumlah.toString());
+                        for (int i = 1; i <= kaliBayar; i++) {
+                            cmbAngsuranJumlah.addItem(i);
+                        }
+                        txtAngsuranTotalBayar.setText("");
                     }
-                    txtAngsuranTotalBayar.setText("");
                 }
-            }
-        });
+            });
+        }
     }
 
-    public void tampilkanJumlah() {
+    private void tampilkanJumlahAngsuran() {
         String nominal = txtAngsuranNominal.getText();
         String kaliBayarS = cmbAngsuranJumlah.getSelectedItem().toString();
         Double totalBayar = Double.valueOf(nominal) * Integer.valueOf(kaliBayarS);
         txtAngsuranTotalBayar.setText(totalBayar.toString());
     }
 
-    public void lakukanPembayaran() {
+    private void lakukanPembayaranAngsuran() {
         if (!txtAngsuranBayar.getText().trim().isEmpty()) {
             Double totalBayar = Double.valueOf(txtAngsuranTotalBayar.getText());
             Double jumlahUang = Double.valueOf(txtAngsuranBayar.getText());
             Double kembalian = jumlahUang - totalBayar;
             lblAngsuranKembalian.setText(kembalian.toString());
             btnAngsuranSimpan.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Silahkan Input Banyaknya Uang untuk dibayarkan");
         }
     }
 
-    public void simpanPembayaran() {
+    private void simpanPembayaranAngsuran() {
         TagihanAngsuranService tagihanService = new TagihanAngsuranServiceImpl();
         LaporanAngsuranService laporanService = new LaporanAngsuranServiceImpl();
 
@@ -137,12 +147,12 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
         updated.setNamaTagihan(txtAngsuranNamaPembayaran.getText());
         updated.setNis(txtAngsuranNis.getText());
         tagihanService.update(updated);
-        cariNis();
+        cariNisAngsuran();
         txtAngsuranBayar.setText("");
         lblAngsuranKembalian.setText("0");
     }
 
-    public void batal() {
+    private void batalAngsuran() {
         txtAngsuranNis.setText("");
         txtAngsuranNama.setText("");
         txtAngsuranKelas.setText("");
@@ -151,6 +161,98 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
         txtAngsuranTotalBayar.setText("");
         txtAngsuranBayar.setText("");
         lblAngsuranKembalian.setText("0");
+    }
+
+    private void pilihDataTableTunai() {
+        if (jTabbedPane1.getSelectedIndex() == 2) {
+            btnTunaiSimpan.setEnabled(false);
+            tblTunai.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
+                    if (tblTunai.getSelectedRow() != -1) {
+                        int index = tblTunai.getSelectedRow();
+                        String namaTagihan = (String) tagihanTunaiTableModel.getValueAt(index, 1);
+                        Double jumlah = (Double) tagihanTunaiTableModel.getValueAt(index, 2);
+                        txtTunaiNamaTagihan.setText(namaTagihan);
+                        txtTunaiJumlah.setText(jumlah.toString());
+                    }
+                }
+            });
+        }
+    }
+
+    private void cariNisTunai() {
+        if (txtTunaiCariNis.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nis Siswa Masih Kosong");
+        } else {
+            tagihanTunaiTableModel = new TagihanTunaiTableModel();
+            String nis = txtTunaiCariNis.getText();
+            TagihanTunaiService service = new TagihanTunaiServiceImpl();
+            List<TagihanTunai> list = service.findAllByNis(nis);
+            for (TagihanTunai tagihanTunai : list) {
+                txtTunaiCariNama.setText(tagihanTunai.getNama());
+                txtTunaiCariNis.setText(tagihanTunai.getNis());
+                txtTunaiKelas.setText(tagihanTunai.getKelas());
+            }
+            tagihanTunaiTableModel.setList(list);
+            tblTunai.setModel(tagihanTunaiTableModel);
+            TableAutoColumnWidth tableAutoColumnWidth = new TableAutoColumnWidth(tblTunai);
+            pilihDataTableTunai();
+        }
+    }
+
+    private void cariNamaTunai() {
+        if (txtTunaiCariNama.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama Siswa Masih Kosong");
+        } else {
+            tagihanTunaiTableModel = new TagihanTunaiTableModel();
+            String nama = txtTunaiCariNama.getText();
+            TagihanTunaiService service = new TagihanTunaiServiceImpl();
+            List<TagihanTunai> list = service.findAllByNama(nama);
+            for (TagihanTunai tagihanTunai : list) {
+                txtTunaiCariNis.setText(tagihanTunai.getNis());
+                txtTunaiCariNama.setText(tagihanTunai.getNama());
+                txtTunaiKelas.setText(tagihanTunai.getKelas());
+            }
+            tagihanTunaiTableModel.setList(list);
+            tblTunai.setModel(tagihanTunaiTableModel);
+            TableAutoColumnWidth tableAutoColumnWidth = new TableAutoColumnWidth(tblTunai);
+            pilihDataTableTunai();
+        }
+    }
+
+    private void lakukanPembayaranTunai() {
+        if (!txtTunaiBayar.getText().trim().isEmpty()) {
+            Double totalBayar = Double.valueOf(txtTunaiJumlah.getText());
+            Double jumlahUang = Double.valueOf(txtTunaiBayar.getText());
+            Double kembalian = jumlahUang - totalBayar;
+            lblTunaiKembalian.setText(kembalian.toString());
+            btnTunaiSimpan.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Silahkan Input Banyaknya Uang untuk dibayarkan");
+        }
+    }
+
+    private void simpanPembayaranTunai() {
+        TagihanTunaiService tunaiService = new TagihanTunaiServiceImpl();
+        LaporanTunaiService laporanService = new LaporanTunaiServiceImpl();
+
+        LaporanTunai laporan = new LaporanTunai();
+        laporan.setNis(txtTunaiCariNis.getText());
+        laporan.setNama(txtTunaiCariNama.getText());
+        laporan.setNamaTagihan(txtTunaiNamaTagihan.getText());
+        laporan.setNominal(Double.valueOf(txtTunaiJumlah.getText()));
+        laporan.setTotalBayar(Double.valueOf(txtTunaiBayar.getText()));
+        laporan.setKembalian(Double.valueOf(lblTunaiKembalian.getText()));
+        laporanService.save(laporan);
+
+        TagihanTunai tunai = tunaiService.findOneByNisAndNamaTagihan(txtTunaiCariNis.getText(), txtTunaiNamaTagihan.getText());
+        this.setTitle(tunai.getId().toString());
+        tunaiService.delete(tunai.getId());
+        cariNisTunai();
+        txtTunaiBayar.setText("");
+        lblTunaiKembalian.setText("0");
     }
 
     /**
@@ -232,32 +334,29 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
-        jTextField12 = new javax.swing.JTextField();
-        jTextField15 = new javax.swing.JTextField();
+        txtTunaiCariNis = new javax.swing.JTextField();
+        txtTunaiCariNama = new javax.swing.JTextField();
+        txtTunaiKelas = new javax.swing.JTextField();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        tblTunai = new javax.swing.JTable();
         jPanel11 = new javax.swing.JPanel();
-        jTextField18 = new javax.swing.JTextField();
-        jTextField19 = new javax.swing.JTextField();
+        txtTunaiJumlah = new javax.swing.JTextField();
+        txtTunaiBayar = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jButton9 = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
+        btnTunaiSimpan = new javax.swing.JButton();
+        txtTunaiNamaTagihan = new javax.swing.JTextField();
+        lblTunaiKembalian = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jButton16 = new javax.swing.JButton();
         jButton17 = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1024, 550));
-
-        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jTabbedPane1StateChanged(evt);
-            }
-        });
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel7.setPreferredSize(new java.awt.Dimension(420, 380));
@@ -820,13 +919,25 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
 
         jLabel16.setText("Kelas");
 
+        txtTunaiKelas.setEnabled(false);
+
         jButton7.setText("Cari");
         jButton7.setPreferredSize(new java.awt.Dimension(40, 30));
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("Cari");
         jButton8.setPreferredSize(new java.awt.Dimension(40, 30));
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(tblTunai);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -843,11 +954,11 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
                             .addComponent(jLabel16))
                         .addGap(46, 46, 46)
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-                            .addComponent(jTextField12)
+                            .addComponent(txtTunaiCariNis, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+                            .addComponent(txtTunaiCariNama)
                             .addGroup(jPanel10Layout.createSequentialGroup()
-                                .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(txtTunaiKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 102, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -860,17 +971,17 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTunaiCariNis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
-                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTunaiCariNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTunaiKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -879,9 +990,10 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
         jPanel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel11.setPreferredSize(new java.awt.Dimension(420, 380));
 
-        jTextField18.setPreferredSize(new java.awt.Dimension(90, 30));
+        txtTunaiJumlah.setEnabled(false);
+        txtTunaiJumlah.setPreferredSize(new java.awt.Dimension(90, 30));
 
-        jTextField19.setPreferredSize(new java.awt.Dimension(90, 30));
+        txtTunaiBayar.setPreferredSize(new java.awt.Dimension(90, 30));
 
         jLabel17.setText("Jumlah yang harus dibayar");
 
@@ -889,57 +1001,87 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
 
         jButton9.setText("Bayar");
         jButton9.setPreferredSize(new java.awt.Dimension(50, 30));
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         jLabel19.setText("Kembali :");
 
         jLabel20.setText("Nama pembayaran");
 
+        btnTunaiSimpan.setText("Simpan");
+        btnTunaiSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTunaiSimpanActionPerformed(evt);
+            }
+        });
+
+        txtTunaiNamaTagihan.setEnabled(false);
+        txtTunaiNamaTagihan.setPreferredSize(new java.awt.Dimension(10, 30));
+
+        lblTunaiKembalian.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        lblTunaiKembalian.setText("0");
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                .addGap(120, 120, 120)
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(195, 195, 195))
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(153, 153, 153))
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField19, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel11Layout.createSequentialGroup()
-                                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(96, 96, 96)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(323, 323, 323))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnTunaiSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(120, 120, 120)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                        .addGap(195, 195, 195))
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(153, 153, 153))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtTunaiNamaTagihan, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtTunaiJumlah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtTunaiBayar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel11Layout.createSequentialGroup()
+                                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(52, 52, 52)
+                                .addComponent(lblTunaiKembalian)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel20)
-                .addGap(56, 56, 56)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtTunaiNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel17)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtTunaiJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
                 .addComponent(jLabel18)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTunaiBayar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(42, 42, 42)
-                .addComponent(jLabel19)
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(lblTunaiKembalian))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addComponent(btnTunaiSimpan)
+                .addContainerGap())
         );
 
         jButton16.setText("Batal");
@@ -1029,7 +1171,7 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jRadioButton8ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        batal();
+        batalAngsuran();
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
@@ -1052,32 +1194,45 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton17ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        cariNis();
+        cariNisAngsuran();
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        cariNama();
+        cariNamaAngsuran();
     }//GEN-LAST:event_jButton13ActionPerformed
 
-    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
-
-    }//GEN-LAST:event_jTabbedPane1StateChanged
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        tampilkanJumlah();
+        tampilkanJumlahAngsuran();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        lakukanPembayaran();
+        lakukanPembayaranAngsuran();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnAngsuranSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAngsuranSimpanActionPerformed
-        simpanPembayaran();
+        simpanPembayaranAngsuran();
     }//GEN-LAST:event_btnAngsuranSimpanActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        cariNisTunai();
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        cariNamaTunai();
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        lakukanPembayaranTunai();
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void btnTunaiSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTunaiSimpanActionPerformed
+        simpanPembayaranTunai();
+    }//GEN-LAST:event_btnTunaiSimpanActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAngsuranSimpan;
+    private javax.swing.JButton btnTunaiSimpan;
     private javax.swing.JComboBox cmbAngsuranJumlah;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
@@ -1145,19 +1300,15 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField15;
-    private javax.swing.JTextField jTextField18;
-    private javax.swing.JTextField jTextField19;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     private javax.swing.JLabel lblAngsuranKembalian;
+    private javax.swing.JLabel lblTunaiKembalian;
     private javax.swing.JTable tblAngsuran;
+    private javax.swing.JTable tblTunai;
     private javax.swing.JTextField txtAngsuranBayar;
     private javax.swing.JTextField txtAngsuranKelas;
     private javax.swing.JTextField txtAngsuranNama;
@@ -1165,5 +1316,11 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtAngsuranNis;
     private javax.swing.JTextField txtAngsuranNominal;
     private javax.swing.JTextField txtAngsuranTotalBayar;
+    private javax.swing.JTextField txtTunaiBayar;
+    private javax.swing.JTextField txtTunaiCariNama;
+    private javax.swing.JTextField txtTunaiCariNis;
+    private javax.swing.JTextField txtTunaiJumlah;
+    private javax.swing.JTextField txtTunaiKelas;
+    private javax.swing.JTextField txtTunaiNamaTagihan;
     // End of variables declaration//GEN-END:variables
 }

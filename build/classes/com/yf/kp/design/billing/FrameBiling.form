@@ -275,12 +275,14 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jDoubleList1" max="32767" attributes="0"/>
+                          <Component id="dblTunai" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Component id="jLabel6" min="-2" pref="130" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="cmbTunaiNamaTagihan" min="-2" pref="250" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="350" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtTunaiJumlah" min="-2" pref="163" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="181" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -300,9 +302,10 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cmbTunaiNamaTagihan" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtTunaiJumlah" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jDoubleList1" pref="354" max="32767" attributes="0"/>
+                      <Component id="dblTunai" pref="354" max="32767" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jButton5" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -325,8 +328,11 @@
                   <StringArray count="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cmbTunaiNamaTagihanItemStateChanged"/>
+              </Events>
             </Component>
-            <Component class="com.stripbandunk.jwidget.JDoubleList" name="jDoubleList1">
+            <Component class="com.stripbandunk.jwidget.JDoubleList" name="dblTunai">
             </Component>
             <Component class="javax.swing.JButton" name="jButton5">
               <Properties>
@@ -345,6 +351,14 @@
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[100, 30]"/>
                 </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton6ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txtTunaiJumlah">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
           </SubComponents>

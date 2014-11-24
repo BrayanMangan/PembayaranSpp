@@ -2,6 +2,7 @@
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
+        
         <!-- Database Configuration -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
@@ -40,5 +41,6 @@
         <mapping class="com.yf.kp.model.TagihanBulanan"/>
         <mapping class="com.yf.kp.model.TagihanTunai"/>
         <mapping class="com.yf.kp.model.LaporanAngsuran"/>
+        <mapping class="com.yf.kp.model.LaporanTunai"/>
     </session-factory>
 </hibernate-configuration>

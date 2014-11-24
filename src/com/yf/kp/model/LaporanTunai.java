@@ -25,15 +25,15 @@ import javax.persistence.Table;
  * @author anonymous
  */
 @Entity
-@Table(name = "tagihan_tunai")
-public class TagihanTunai extends BaseModel {
+@Table(name = "laporan_tunai")
+public class LaporanTunai extends BaseModel {
 
     private String nis;
     private String nama;
-    private String kelas;
     private String namaTagihan;
-    private String kategori;
-    private Double jumlah;
+    private Double nominal;
+    private Double totalBayar;
+    private Double kembalian;
 
     public String getNis() {
         return nis;
@@ -51,14 +51,6 @@ public class TagihanTunai extends BaseModel {
         this.nama = nama;
     }
 
-    public String getKelas() {
-        return kelas;
-    }
-
-    public void setKelas(String kelas) {
-        this.kelas = kelas;
-    }
-
     public String getNamaTagihan() {
         return namaTagihan;
     }
@@ -67,20 +59,28 @@ public class TagihanTunai extends BaseModel {
         this.namaTagihan = namaTagihan;
     }
 
-    public String getKategori() {
-        return kategori;
+    public Double getNominal() {
+        return nominal;
     }
 
-    public void setKategori(String kategori) {
-        this.kategori = kategori;
+    public void setNominal(Double nominal) {
+        this.nominal = nominal;
     }
 
-    public Double getJumlah() {
-        return jumlah;
+    public Double getTotalBayar() {
+        return totalBayar;
     }
 
-    public void setJumlah(Double jumlah) {
-        this.jumlah = jumlah;
+    public void setTotalBayar(Double totalBayar) {
+        this.totalBayar = totalBayar;
+    }
+
+    public Double getKembalian() {
+        return kembalian;
+    }
+
+    public void setKembalian(Double kembalian) {
+        this.kembalian = kembalian;
     }
 
 }

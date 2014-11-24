@@ -16,36 +16,17 @@
  */
 package com.yf.kp.service.impl;
 
-import com.yf.kp.model.Tunai;
-import com.yf.kp.service.TunaiService;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import com.yf.kp.model.LaporanTunai;
+import com.yf.kp.service.LaporanTunaiService;
 
 /**
  *
  * @author anonymous
  */
-public class TunaiServiceImpl extends AbstractServiceImpl<Tunai> implements TunaiService {
+public class LaporanTunaiServiceImpl extends AbstractServiceImpl<LaporanTunai> implements LaporanTunaiService {
 
-    public TunaiServiceImpl() {
-        super(Tunai.class);
-    }
-
-    @Override
-    public Tunai findOneByName(String nama) {
-        Tunai tunai = new Tunai();
-        connect();
-        try {
-            Query q = manager().createQuery("SELECT T FROM Tunai T WHERE T.nama = :kode");
-            q.setParameter("kode", nama);
-            tunai = (Tunai) q.uniqueResult();
-            commit();
-        } catch (HibernateException e) {
-            rollback();
-        } finally {
-            close();
-        }
-        return tunai;
+    public LaporanTunaiServiceImpl() {
+        super(LaporanTunai.class);
     }
 
 }

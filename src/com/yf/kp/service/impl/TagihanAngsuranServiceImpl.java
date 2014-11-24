@@ -34,12 +34,11 @@ public class TagihanAngsuranServiceImpl extends AbstractServiceImpl<TagihanAngsu
     }
 
     @Override
-    public void saveBatch(TagihanAngsuran tagihanAngsuran, String nama) {
+    public void saveBatch(TagihanAngsuran tagihanAngsuran, List<String> listSiswa) {
         connect();
         try {
             manager().persist(tagihanAngsuran);
-            if (nama.length() % 20 == 0) { //20, same as the JDBC batch size
-                //flush a batch of inserts and release memory:
+            if (listSiswa.size() % 20 == 0) {
                 manager().flush();
                 manager().clear();
             }

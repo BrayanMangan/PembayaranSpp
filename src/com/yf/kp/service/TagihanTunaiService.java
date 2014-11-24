@@ -17,6 +17,7 @@
 package com.yf.kp.service;
 
 import com.yf.kp.model.TagihanTunai;
+import java.util.List;
 
 /**
  *
@@ -24,4 +25,11 @@ import com.yf.kp.model.TagihanTunai;
  */
 public interface TagihanTunaiService extends AbstractService<TagihanTunai> {
 
+    public void saveBatch(TagihanTunai tagihanTunai, List<String> listSiswa);
+
+    public List<TagihanTunai> findAllByNis(String nis);
+
+    public List<TagihanTunai> findAllByNama(String nama);
+
+    public TagihanTunai findOneByNisAndNamaTagihan(String text, String text0);
 }
