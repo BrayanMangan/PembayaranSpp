@@ -25,4 +25,6 @@ import com.yf.kp.model.Bulanan;
  */
 public interface BulananService extends AbstractService<Bulanan>{
     
+    public Bulanan findOneByName(String name);
+
 }

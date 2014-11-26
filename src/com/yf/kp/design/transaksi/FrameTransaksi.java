@@ -1,18 +1,25 @@
 package com.yf.kp.design.transaksi;
 
 import com.yf.kp.design.transaksi.tablemodel.TagihanAngsuranTableModel;
+import com.yf.kp.design.transaksi.tablemodel.TagihanBulananTableModel;
 import com.yf.kp.design.transaksi.tablemodel.TagihanTunaiTableModel;
 import com.yf.kp.model.LaporanAngsuran;
+import com.yf.kp.model.LaporanBulanan;
 import com.yf.kp.model.LaporanTunai;
 import com.yf.kp.model.TagihanAngsuran;
+import com.yf.kp.model.TagihanBulanan;
 import com.yf.kp.model.TagihanTunai;
 import com.yf.kp.service.LaporanAngsuranService;
+import com.yf.kp.service.LaporanBulananService;
 import com.yf.kp.service.LaporanTunaiService;
 import com.yf.kp.service.TagihanAngsuranService;
+import com.yf.kp.service.TagihanBulananService;
 import com.yf.kp.service.TagihanTunaiService;
 import com.yf.kp.service.impl.LaporanAngsuranServiceImpl;
+import com.yf.kp.service.impl.LaporanBulananServiceImpl;
 import com.yf.kp.service.impl.LaporanTunaiServiceImpl;
 import com.yf.kp.service.impl.TagihanAngsuranServiceImpl;
+import com.yf.kp.service.impl.TagihanBulananServiceImpl;
 import com.yf.kp.service.impl.TagihanTunaiServiceImpl;
 import com.yf.kp.utility.TableAutoColumnWidth;
 import java.util.List;
@@ -28,12 +35,49 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
 
     private TagihanAngsuranTableModel tagihanAngsuranTableModel;
     private TagihanTunaiTableModel tagihanTunaiTableModel;
+    private TagihanBulananTableModel tagihanBulananTableModel;
+    private List<TagihanBulanan> listBulanan;
+    private Double bulananNominal;
+    private Double total = 0.0;
+
+    public Double getBulananNominal() {
+        return bulananNominal;
+    }
+
+    public void setBulananNominal(Double bulananNominal) {
+        this.bulananNominal = bulananNominal;
+    }
 
     /**
      * Creates new form FrameTransaksi
      */
     public FrameTransaksi() {
         initComponents();
+    }
+
+    private void pilihDataTableAngsuran() {
+        if (jTabbedPane1.getSelectedIndex() == 0) {
+            btnAngsuranSimpan.setEnabled(false);
+            tblAngsuran.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
+                    if (tblAngsuran.getSelectedRow() != -1) {
+                        cmbAngsuranJumlah.removeAllItems();
+                        int index = tblAngsuran.getSelectedRow();
+                        String namaTagihan = (String) tagihanAngsuranTableModel.getValueAt(index, 1);
+                        Double jumlah = (Double) tagihanAngsuranTableModel.getValueAt(index, 2);
+                        Integer kaliBayar = (Integer) tagihanAngsuranTableModel.getValueAt(index, 3);
+                        txtAngsuranNamaPembayaran.setText(namaTagihan);
+                        txtAngsuranNominal.setText(jumlah.toString());
+                        for (int i = 1; i <= kaliBayar; i++) {
+                            cmbAngsuranJumlah.addItem(i);
+                        }
+                        txtAngsuranTotalBayar.setText("");
+                    }
+                }
+            });
+        }
     }
 
     private void cariNisAngsuran() {
@@ -76,31 +120,6 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
         }
     }
 
-    private void pilihDataTableAngsuran() {
-        if (jTabbedPane1.getSelectedIndex() == 0) {
-            btnAngsuranSimpan.setEnabled(false);
-            tblAngsuran.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
-                @Override
-                public void valueChanged(ListSelectionEvent e) {
-                    if (tblAngsuran.getSelectedRow() != -1) {
-                        cmbAngsuranJumlah.removeAllItems();
-                        int index = tblAngsuran.getSelectedRow();
-                        String namaTagihan = (String) tagihanAngsuranTableModel.getValueAt(index, 1);
-                        Double jumlah = (Double) tagihanAngsuranTableModel.getValueAt(index, 2);
-                        Integer kaliBayar = (Integer) tagihanAngsuranTableModel.getValueAt(index, 3);
-                        txtAngsuranNamaPembayaran.setText(namaTagihan);
-                        txtAngsuranNominal.setText(jumlah.toString());
-                        for (int i = 1; i <= kaliBayar; i++) {
-                            cmbAngsuranJumlah.addItem(i);
-                        }
-                        txtAngsuranTotalBayar.setText("");
-                    }
-                }
-            });
-        }
-    }
-
     private void tampilkanJumlahAngsuran() {
         String nominal = txtAngsuranNominal.getText();
         String kaliBayarS = cmbAngsuranJumlah.getSelectedItem().toString();
@@ -136,9 +155,8 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
         laporanService.save(laporan);
 
         TagihanAngsuran tagihan = tagihanService.findOneByNisAndNamaTagihan(txtAngsuranNis.getText(), txtAngsuranNamaPembayaran.getText());
-        this.setTitle(tagihan.getId().toString());
         TagihanAngsuran updated = new TagihanAngsuran();
-        updated.setId(Long.valueOf(this.getTitle()));
+        updated.setId(tagihan.getId());
         updated.setJumlah(Double.valueOf(txtAngsuranNominal.getText()));
         updated.setKaliBayar(tagihan.getKaliBayar() - Integer.valueOf(cmbAngsuranJumlah.getSelectedItem().toString()));
         updated.setKategori("Angsuran");
@@ -255,6 +273,218 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
         lblTunaiKembalian.setText("0");
     }
 
+    private void disableChkBoxBulanan(Boolean januari, Boolean februari, Boolean maret,
+            Boolean april, Boolean mei, Boolean juni, Boolean juli, Boolean agustus, Boolean september,
+            Boolean oktober, Boolean november, Boolean desember) {
+        if (januari) {
+            chkJanuari.setEnabled(false);
+            if (!chkJanuari.isEnabled()) {
+                chkJanuari.setSelected(false);
+            }
+        }
+        if (februari) {
+            chkFebruari.setEnabled(false);
+            if (!chkFebruari.isEnabled()) {
+                chkFebruari.setSelected(false);
+            }
+        }
+        if (maret) {
+            chkMaret.setEnabled(false);
+            if (!chkMaret.isEnabled()) {
+                chkMaret.setSelected(false);
+            }
+        }
+        if (april) {
+            chkApril.setEnabled(false);
+            if (!chkApril.isEnabled()) {
+                chkApril.setSelected(false);
+            }
+        }
+        if (mei) {
+            chkMei.setEnabled(false);
+            if (!chkMei.isEnabled()) {
+                chkMei.setSelected(false);
+            }
+        }
+        if (juni) {
+            chkJuni.setEnabled(false);
+            if (!chkJuni.isEnabled()) {
+                chkJuni.setSelected(false);
+            }
+        }
+        if (juli) {
+            chkJuli.setEnabled(false);
+            if (!chkJuli.isEnabled()) {
+                chkJuli.setSelected(false);
+            }
+        }
+        if (agustus) {
+            chkAgustus.setEnabled(false);
+            if (!chkAgustus.isEnabled()) {
+                chkAgustus.setSelected(false);
+            }
+        }
+        if (september) {
+            chkSeptember.setEnabled(false);
+            if (!chkSeptember.isEnabled()) {
+                chkSeptember.setSelected(false);
+            }
+        }
+        if (oktober) {
+            chkOktober.setEnabled(false);
+            if (!chkOktober.isEnabled()) {
+                chkOktober.setSelected(false);
+            }
+        }
+        if (november) {
+            chkNovember.setEnabled(false);
+            if (!chkNovember.isEnabled()) {
+                chkNovember.setSelected(false);
+            }
+        }
+        if (desember) {
+            chkDesember.setEnabled(false);
+            if (!chkDesember.isEnabled()) {
+                chkDesember.setSelected(false);
+            }
+        }
+    }
+
+    private void pilihDataTableBulanan() {
+        if (jTabbedPane1.getSelectedIndex() == 1) {
+            btnBulananSimpan.setEnabled(false);
+            tblBulanan.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
+                    if (tblBulanan.getSelectedRow() != -1) {
+                        int index = tblBulanan.convertRowIndexToModel(tblBulanan.getSelectedRow());
+                        TagihanBulanan tagihanBulanan = listBulanan.get(index);
+                        txtBulananNamaTagihan.setText(tagihanBulanan.getNamaTagihan());
+                        chkJanuari.setSelected(tagihanBulanan.isJanuari());
+                        chkFebruari.setSelected(tagihanBulanan.isFebruari());
+                        chkMaret.setSelected(tagihanBulanan.isMaret());
+                        chkApril.setSelected(tagihanBulanan.isApril());
+                        chkMei.setSelected(tagihanBulanan.isMei());
+                        chkJuni.setSelected(tagihanBulanan.isJuni());
+                        chkJuli.setSelected(tagihanBulanan.isJuli());
+                        chkAgustus.setSelected(tagihanBulanan.isAgustus());
+                        chkSeptember.setSelected(tagihanBulanan.isSeptember());
+                        chkOktober.setSelected(tagihanBulanan.isOktober());
+                        chkNovember.setSelected(tagihanBulanan.isNovember());
+                        chkDesember.setSelected(tagihanBulanan.isDesember());
+                        setBulananNominal(tagihanBulanan.getJumlah());
+                        disableChkBoxBulanan(tagihanBulanan.isJanuari(), tagihanBulanan.isFebruari(), tagihanBulanan.isMaret(), tagihanBulanan.isApril(),
+                                tagihanBulanan.isMei(), tagihanBulanan.isJuni(), tagihanBulanan.isJuli(), tagihanBulanan.isAgustus(), tagihanBulanan.isSeptember(),
+                                tagihanBulanan.isOktober(), tagihanBulanan.isNovember(), tagihanBulanan.isDesember());
+                    }
+                }
+            });
+        }
+    }
+
+    private void cariNisBulanan() {
+        if (txtBulananCariNis.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nis Siswa Masih Kosong");
+        } else {
+            tagihanBulananTableModel = new TagihanBulananTableModel();
+            String nis = txtBulananCariNis.getText();
+            TagihanBulananService service = new TagihanBulananServiceImpl();
+            listBulanan = service.findAllByNis(nis);
+            for (TagihanBulanan tagihanBulanan : listBulanan) {
+                txtBulananCariNama.setText(tagihanBulanan.getNama());
+                txtBulananCariNis.setText(tagihanBulanan.getNis());
+                txtBulananKelas.setText(tagihanBulanan.getKelas());
+            }
+            tagihanBulananTableModel.setList(listBulanan);
+            tblBulanan.setModel(tagihanBulananTableModel);
+            TableAutoColumnWidth tableAutoColumnWidth = new TableAutoColumnWidth(tblBulanan);
+            pilihDataTableBulanan();
+        }
+    }
+
+    private void cariNamaBulanan() {
+        if (txtBulananCariNama.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama Siswa Masih Kosong");
+        } else {
+            TagihanBulananService service = new TagihanBulananServiceImpl();
+            tagihanBulananTableModel = new TagihanBulananTableModel();
+            String nama = txtBulananCariNama.getText();
+            listBulanan = service.findAllByNama(nama);
+            for (TagihanBulanan tagihanBulanan : listBulanan) {
+                txtBulananCariNama.setText(tagihanBulanan.getNama());
+                txtBulananCariNis.setText(tagihanBulanan.getNis());
+                txtBulananKelas.setText(tagihanBulanan.getKelas());
+            }
+            tagihanBulananTableModel.setList(listBulanan);
+            tblBulanan.setModel(tagihanBulananTableModel);
+            TableAutoColumnWidth tableAutoColumnWidth = new TableAutoColumnWidth(tblBulanan);
+            pilihDataTableBulanan();
+        }
+    }
+
+    private void simpanPembayaranBulanan() {
+
+        TagihanBulananService bulananService = new TagihanBulananServiceImpl();
+        LaporanBulananService laporanService = new LaporanBulananServiceImpl();
+
+        LaporanBulanan laporan = new LaporanBulanan();
+        laporan.setNis(txtBulananCariNis.getText());
+        laporan.setNama(txtBulananCariNama.getText());
+        laporan.setNamaTagihan(txtBulananNamaTagihan.getText());
+        laporan.setNominal(Double.valueOf(txtBulananTotalBayar.getText()));
+        laporan.setTotalBayar(Double.valueOf(txtBulananBayar.getText()));
+        laporan.setKembalian(Double.valueOf(lblBulananKembalian.getText()));
+        laporan.setJanuari(chkJanuari.isSelected());
+        laporan.setFebruari(chkFebruari.isSelected());
+        laporan.setMaret(chkMaret.isSelected());
+        laporan.setApril(chkApril.isSelected());
+        laporan.setMei(chkMei.isSelected());
+        laporan.setJuni(chkJuni.isSelected());
+        laporan.setJuli(chkJuni.isSelected());
+        laporan.setAgustus(chkAgustus.isSelected());
+        laporan.setSeptember(chkSeptember.isSelected());
+        laporan.setOktober(chkOktober.isSelected());
+        laporan.setNovember(chkNovember.isSelected());
+        laporan.setDesember(chkDesember.isSelected());
+        laporanService.save(laporan);
+
+        TagihanBulanan bulanan = bulananService.findOneByNisAndNamaTagihan(txtBulananCariNis.getText(), txtBulananNamaTagihan.getText());
+        TagihanBulanan updated = new TagihanBulanan();
+        updated.setId(bulanan.getId());
+        updated.setNis(txtBulananCariNis.getText());
+        updated.setNama(txtBulananCariNama.getText());
+        updated.setNamaTagihan(txtBulananNamaTagihan.getText());
+        updated.setJumlah(Double.valueOf(txtBulananTotalBayar.getText()));
+        updated.setJanuari(chkJanuari.isSelected());
+        updated.setFebruari(chkFebruari.isSelected());
+        updated.setMaret(chkMaret.isSelected());
+        updated.setApril(chkApril.isSelected());
+        updated.setMei(chkMei.isSelected());
+        updated.setJuni(chkJuni.isSelected());
+        updated.setJuli(chkJuni.isSelected());
+        updated.setAgustus(chkAgustus.isSelected());
+        updated.setSeptember(chkSeptember.isSelected());
+        updated.setOktober(chkOktober.isSelected());
+        updated.setNovember(chkNovember.isSelected());
+        updated.setDesember(chkDesember.isSelected());
+        bulananService.update(updated);
+        cariNisBulanan();
+        txtBulananBayar.setText("");
+        lblBulananKembalian.setText("0");
+    }
+
+    private void lakukanPembayaranBulanan() {
+        if (!txtBulananBayar.getText().trim().isEmpty()) {
+            Double totalBayar = Double.valueOf(txtBulananTotalBayar.getText());
+            Double jumlahUang = Double.valueOf(txtBulananBayar.getText());
+            Double kembalian = jumlahUang - totalBayar;
+            lblBulananKembalian.setText(kembalian.toString());
+            btnBulananSimpan.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Silahkan Input Banyaknya Uang untuk dibayarkan");
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -299,33 +529,36 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
+        txtBulananCariNis = new javax.swing.JTextField();
+        txtBulananCariNama = new javax.swing.JTextField();
+        txtBulananKelas = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblBulanan = new javax.swing.JTable();
         jPanel9 = new javax.swing.JPanel();
-        jTextField13 = new javax.swing.JTextField();
-        jTextField14 = new javax.swing.JTextField();
+        txtBulananTotalBayar = new javax.swing.JTextField();
+        txtBulananBayar = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
-        jRadioButton5 = new javax.swing.JRadioButton();
-        jRadioButton6 = new javax.swing.JRadioButton();
-        jRadioButton7 = new javax.swing.JRadioButton();
-        jRadioButton8 = new javax.swing.JRadioButton();
-        jRadioButton9 = new javax.swing.JRadioButton();
-        jRadioButton10 = new javax.swing.JRadioButton();
-        jRadioButton11 = new javax.swing.JRadioButton();
-        jRadioButton12 = new javax.swing.JRadioButton();
         jLabel13 = new javax.swing.JLabel();
+        chkJanuari = new javax.swing.JCheckBox();
+        chkFebruari = new javax.swing.JCheckBox();
+        chkMaret = new javax.swing.JCheckBox();
+        chkApril = new javax.swing.JCheckBox();
+        chkMei = new javax.swing.JCheckBox();
+        chkJuni = new javax.swing.JCheckBox();
+        chkJuli = new javax.swing.JCheckBox();
+        chkAgustus = new javax.swing.JCheckBox();
+        chkSeptember = new javax.swing.JCheckBox();
+        chkOktober = new javax.swing.JCheckBox();
+        chkNovember = new javax.swing.JCheckBox();
+        chkDesember = new javax.swing.JCheckBox();
+        lblBulananKembalian = new javax.swing.JLabel();
+        btnBulananSimpan = new javax.swing.JButton();
+        txtBulananNamaTagihan = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jButton15 = new javax.swing.JButton();
         jButton14 = new javax.swing.JButton();
@@ -479,7 +712,7 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblAngsuranKembalian))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
                 .addComponent(btnAngsuranSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -619,9 +852,9 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
+                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -640,11 +873,21 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
 
         jButton4.setText("Cari");
         jButton4.setPreferredSize(new java.awt.Dimension(40, 30));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Cari");
         jButton5.setPreferredSize(new java.awt.Dimension(40, 30));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblBulanan);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -661,11 +904,11 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
                             .addComponent(jLabel9))
                         .addGap(46, 46, 46)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField9)
-                            .addComponent(jTextField8)
+                            .addComponent(txtBulananCariNama)
+                            .addComponent(txtBulananCariNis)
                             .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 11, Short.MAX_VALUE)))
+                                .addComponent(txtBulananKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 89, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
@@ -678,17 +921,17 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBulananCariNis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBulananCariNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBulananKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -697,9 +940,10 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
         jPanel9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel9.setPreferredSize(new java.awt.Dimension(420, 380));
 
-        jTextField13.setPreferredSize(new java.awt.Dimension(90, 30));
+        txtBulananTotalBayar.setEnabled(false);
+        txtBulananTotalBayar.setPreferredSize(new java.awt.Dimension(90, 30));
 
-        jTextField14.setPreferredSize(new java.awt.Dimension(90, 30));
+        txtBulananBayar.setPreferredSize(new java.awt.Dimension(90, 30));
 
         jLabel10.setText("Jumlah yang harus dibayar");
 
@@ -707,140 +951,210 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
 
         jButton6.setText("Bayar");
         jButton6.setPreferredSize(new java.awt.Dimension(50, 30));
-
-        jLabel12.setText("Kembali :");
-
-        jRadioButton1.setText("Januari");
-
-        jRadioButton2.setText("Februari");
-
-        jRadioButton3.setText("Maret");
-
-        jRadioButton4.setText("April");
-
-        jRadioButton5.setText("Mei");
-
-        jRadioButton6.setText("Juni");
-
-        jRadioButton7.setText("Juli");
-
-        jRadioButton8.setText("Agustus");
-        jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton8ActionPerformed(evt);
+                jButton6ActionPerformed(evt);
             }
         });
 
-        jRadioButton9.setText("September");
-
-        jRadioButton10.setText("Oktober");
-
-        jRadioButton11.setText("November");
-
-        jRadioButton12.setText("Desember");
+        jLabel12.setText("Kembali :");
 
         jLabel13.setText("Nama pembayaran");
+
+        chkJanuari.setText("Januari");
+        chkJanuari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkJanuariActionPerformed(evt);
+            }
+        });
+
+        chkFebruari.setText("Februari");
+        chkFebruari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkFebruariActionPerformed(evt);
+            }
+        });
+
+        chkMaret.setText("Maret");
+        chkMaret.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkMaretActionPerformed(evt);
+            }
+        });
+
+        chkApril.setText("April");
+        chkApril.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkAprilActionPerformed(evt);
+            }
+        });
+
+        chkMei.setText("Mei");
+        chkMei.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkMeiActionPerformed(evt);
+            }
+        });
+
+        chkJuni.setText("Juni");
+        chkJuni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkJuniActionPerformed(evt);
+            }
+        });
+
+        chkJuli.setText("Juli");
+        chkJuli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkJuliActionPerformed(evt);
+            }
+        });
+
+        chkAgustus.setText("Agustus");
+        chkAgustus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkAgustusActionPerformed(evt);
+            }
+        });
+
+        chkSeptember.setText("September");
+        chkSeptember.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkSeptemberActionPerformed(evt);
+            }
+        });
+
+        chkOktober.setText("Oktober");
+        chkOktober.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkOktoberActionPerformed(evt);
+            }
+        });
+
+        chkNovember.setText("November");
+        chkNovember.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkNovemberActionPerformed(evt);
+            }
+        });
+
+        chkDesember.setText("Desember");
+        chkDesember.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkDesemberActionPerformed(evt);
+            }
+        });
+
+        lblBulananKembalian.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        lblBulananKembalian.setText("0");
+
+        btnBulananSimpan.setText("Simpan");
+        btnBulananSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBulananSimpanActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
-                .addGap(68, 68, 68)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(217, 217, 217))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jRadioButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jRadioButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jRadioButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jRadioButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-                                    .addComponent(jRadioButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jRadioButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel9Layout.createSequentialGroup()
-                                        .addComponent(jRadioButton12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(4, 4, 4))
-                                    .addGroup(jPanel9Layout.createSequentialGroup()
-                                        .addComponent(jRadioButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(4, 4, 4))
-                                    .addGroup(jPanel9Layout.createSequentialGroup()
-                                        .addComponent(jRadioButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(16, 16, 16))
-                                    .addComponent(jRadioButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel9Layout.createSequentialGroup()
-                                        .addComponent(jRadioButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(19, 19, 19))
-                                    .addGroup(jPanel9Layout.createSequentialGroup()
-                                        .addComponent(jRadioButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(42, 42, 42))))
-                            .addGroup(jPanel9Layout.createSequentialGroup()
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jTextField13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTextField14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
-                                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(89, 89, 89)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(49, 49, 49)))
-                        .addContainerGap())))
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(281, 281, 281))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtBulananNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(96, 96, 96))
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGap(68, 68, 68)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                        .addGap(217, 217, 217))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtBulananTotalBayar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtBulananBayar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
+                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(lblBulananKembalian)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
+                                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(89, 89, 89)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(61, 61, 61))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(chkJanuari, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(chkFebruari, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                            .addComponent(chkMaret, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(chkMei, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(chkJuni, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(chkApril, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(chkJuli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(chkAgustus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(chkSeptember, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                            .addComponent(chkOktober, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(chkNovember, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(chkDesember, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(79, 79, 79))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnBulananSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel13)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(txtBulananNamaTagihan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(jRadioButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton3))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(jRadioButton7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton9)))
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkJanuari)
+                    .addComponent(chkJuli))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(jRadioButton4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton6))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(jRadioButton10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton12)))
-                .addGap(18, 18, 18)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkFebruari)
+                    .addComponent(chkAgustus))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkMaret)
+                    .addComponent(chkSeptember))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkApril)
+                    .addComponent(chkOktober))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkMei)
+                    .addComponent(chkNovember))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkJuni)
+                    .addComponent(chkDesember))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                .addComponent(jLabel11)
+                .addComponent(txtBulananTotalBayar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBulananBayar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel12)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(lblBulananKembalian))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnBulananSimpan)
                 .addContainerGap())
         );
 
@@ -896,9 +1210,9 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1079,7 +1393,7 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19)
                     .addComponent(lblTunaiKembalian))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addComponent(btnTunaiSimpan)
                 .addContainerGap())
         );
@@ -1139,10 +1453,10 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
+                        .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE))
+                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1166,9 +1480,6 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton8ActionPerformed
-    }//GEN-LAST:event_jRadioButton8ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         batalAngsuran();
@@ -1229,10 +1540,177 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
         simpanPembayaranTunai();
     }//GEN-LAST:event_btnTunaiSimpanActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        cariNisBulanan();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        cariNamaBulanan();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void chkJanuariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkJanuariActionPerformed
+        Double nominal = getBulananNominal();
+        if (chkJanuari.isSelected()) {
+            total += nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        } else {
+            total -= nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        }
+    }//GEN-LAST:event_chkJanuariActionPerformed
+
+    private void chkFebruariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFebruariActionPerformed
+        // TODO add your handling code here:
+        Double nominal = getBulananNominal();
+        if (chkFebruari.isSelected()) {
+            total += nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        } else {
+            total -= nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        }
+    }//GEN-LAST:event_chkFebruariActionPerformed
+
+    private void chkMaretActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkMaretActionPerformed
+        Double nominal = getBulananNominal();
+        if (chkMaret.isSelected()) {
+            total += nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        } else {
+            total -= nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        }
+    }//GEN-LAST:event_chkMaretActionPerformed
+
+    private void chkAprilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAprilActionPerformed
+        Double nominal = getBulananNominal();
+        if (chkApril.isSelected()) {
+            total += nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        } else {
+            total -= nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        }
+    }//GEN-LAST:event_chkAprilActionPerformed
+
+    private void chkMeiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkMeiActionPerformed
+        Double nominal = getBulananNominal();
+        if (chkMei.isSelected()) {
+            total += nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        } else {
+            total -= nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        }
+    }//GEN-LAST:event_chkMeiActionPerformed
+
+    private void chkJuniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkJuniActionPerformed
+        Double nominal = getBulananNominal();
+        if (chkJuni.isSelected()) {
+            total += nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        } else {
+            total -= nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        }
+    }//GEN-LAST:event_chkJuniActionPerformed
+
+    private void chkJuliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkJuliActionPerformed
+        Double nominal = getBulananNominal();
+        if (chkJuli.isSelected()) {
+            total += nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        } else {
+            total -= nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        }
+    }//GEN-LAST:event_chkJuliActionPerformed
+
+    private void chkAgustusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAgustusActionPerformed
+        // TODO add your handling code here:
+        Double nominal = getBulananNominal();
+        if (chkAgustus.isSelected()) {
+            total += nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        } else {
+            total -= nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        }
+    }//GEN-LAST:event_chkAgustusActionPerformed
+
+    private void chkSeptemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkSeptemberActionPerformed
+        // TODO add your handling code here:
+        Double nominal = getBulananNominal();
+        if (chkSeptember.isSelected()) {
+            total += nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        } else {
+            total -= nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        }
+    }//GEN-LAST:event_chkSeptemberActionPerformed
+
+    private void chkOktoberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOktoberActionPerformed
+        // TODO add your handling code here:
+        Double nominal = getBulananNominal();
+        if (chkOktober.isSelected()) {
+            total += nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        } else {
+            total -= nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        }
+    }//GEN-LAST:event_chkOktoberActionPerformed
+
+    private void chkNovemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkNovemberActionPerformed
+        // TODO add your handling code here:
+        Double nominal = getBulananNominal();
+        if (chkNovember.isSelected()) {
+            total += nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        } else {
+            total -= nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        }
+    }//GEN-LAST:event_chkNovemberActionPerformed
+
+    private void chkDesemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDesemberActionPerformed
+        // TODO add your handling code here:
+        Double nominal = getBulananNominal();
+        if (chkDesember.isSelected()) {
+            total += nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        } else {
+            total -= nominal;
+            txtBulananTotalBayar.setText(total.toString());
+        }
+    }//GEN-LAST:event_chkDesemberActionPerformed
+
+    private void btnBulananSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulananSimpanActionPerformed
+        simpanPembayaranBulanan();
+    }//GEN-LAST:event_btnBulananSimpanActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        lakukanPembayaranBulanan();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAngsuranSimpan;
+    private javax.swing.JButton btnBulananSimpan;
     private javax.swing.JButton btnTunaiSimpan;
+    private javax.swing.JCheckBox chkAgustus;
+    private javax.swing.JCheckBox chkApril;
+    private javax.swing.JCheckBox chkDesember;
+    private javax.swing.JCheckBox chkFebruari;
+    private javax.swing.JCheckBox chkJanuari;
+    private javax.swing.JCheckBox chkJuli;
+    private javax.swing.JCheckBox chkJuni;
+    private javax.swing.JCheckBox chkMaret;
+    private javax.swing.JCheckBox chkMei;
+    private javax.swing.JCheckBox chkNovember;
+    private javax.swing.JCheckBox chkOktober;
+    private javax.swing.JCheckBox chkSeptember;
     private javax.swing.JComboBox cmbAngsuranJumlah;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
@@ -1283,31 +1761,15 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton10;
-    private javax.swing.JRadioButton jRadioButton11;
-    private javax.swing.JRadioButton jRadioButton12;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JRadioButton jRadioButton5;
-    private javax.swing.JRadioButton jRadioButton6;
-    private javax.swing.JRadioButton jRadioButton7;
-    private javax.swing.JRadioButton jRadioButton8;
-    private javax.swing.JRadioButton jRadioButton9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     private javax.swing.JLabel lblAngsuranKembalian;
+    private javax.swing.JLabel lblBulananKembalian;
     private javax.swing.JLabel lblTunaiKembalian;
     private javax.swing.JTable tblAngsuran;
+    private javax.swing.JTable tblBulanan;
     private javax.swing.JTable tblTunai;
     private javax.swing.JTextField txtAngsuranBayar;
     private javax.swing.JTextField txtAngsuranKelas;
@@ -1316,6 +1778,12 @@ public class FrameTransaksi extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtAngsuranNis;
     private javax.swing.JTextField txtAngsuranNominal;
     private javax.swing.JTextField txtAngsuranTotalBayar;
+    private javax.swing.JTextField txtBulananBayar;
+    private javax.swing.JTextField txtBulananCariNama;
+    private javax.swing.JTextField txtBulananCariNis;
+    private javax.swing.JTextField txtBulananKelas;
+    private javax.swing.JTextField txtBulananNamaTagihan;
+    private javax.swing.JTextField txtBulananTotalBayar;
     private javax.swing.JTextField txtTunaiBayar;
     private javax.swing.JTextField txtTunaiCariNama;
     private javax.swing.JTextField txtTunaiCariNis;

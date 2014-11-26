@@ -18,6 +18,10 @@ package com.yf.kp.service.impl;
 
 import com.yf.kp.model.TagihanBulanan;
 import com.yf.kp.service.TagihanBulananService;
+import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
 
 /**
  *
@@ -27,6 +31,76 @@ public class TagihanBulananServiceImpl extends AbstractServiceImpl<TagihanBulana
 
     public TagihanBulananServiceImpl() {
         super(TagihanBulanan.class);
+    }
+
+    @Override
+    public void saveBatch(TagihanBulanan tagihanBulanan, List<String> listNamaSiswa) {
+        connect();
+        try {
+            manager().persist(tagihanBulanan);
+            if (listNamaSiswa.size() % 20 == 0) {
+                manager().flush();
+                manager().clear();
+            }
+            commit();
+        } catch (HibernateException ex) {
+            rollback();
+            throw ex;
+        } finally {
+            close();
+        }
+    }
+
+    @Override
+    public List<TagihanBulanan> findAllByNis(String nis) {
+        List<TagihanBulanan> list = new ArrayList<>();
+        connect();
+        try {
+            Query q = manager().createQuery("SELECT TB FROM TagihanBulanan TB WHERE TB.nis = :nis");
+            q.setParameter("nis", nis);
+            list = q.list();
+            commit();
+        } catch (HibernateException e) {
+            rollback();
+        } finally {
+            close();
+        }
+        return list;
+    }
+
+    @Override
+    public List<TagihanBulanan> findAllByNama(String nama) {
+        List<TagihanBulanan> list = new ArrayList<>();
+        connect();
+        try {
+            Query q = manager().createQuery("SELECT TB FROM TagihanBulanan TB WHERE TB.nama LIKE :nama");
+            q.setParameter("nama", "%" + nama + "%");
+            list = q.list();
+            commit();
+        } catch (HibernateException e) {
+            rollback();
+        } finally {
+            close();
+        }
+        return list;
+    }
+
+    @Override
+    public TagihanBulanan findOneByNisAndNamaTagihan(String nis, String namaTagihan) {
+        TagihanBulanan bulanan = new TagihanBulanan();
+        connect();
+        try {
+            Query q = manager().createQuery("SELECT TB FROM TagihanBulanan TB WHERE TB.nis =:nis AND TB.namaTagihan =:namaTagihan");
+            q.setParameter("nis", nis);
+            q.setParameter("namaTagihan", namaTagihan);
+            bulanan = (TagihanBulanan) q.uniqueResult();
+            commit();
+        } catch (HibernateException e) {
+            rollback();
+        } finally {
+            close();
+        }
+        return bulanan;
     }
 
 }

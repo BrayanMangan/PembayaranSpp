@@ -42,5 +42,6 @@
         <mapping class="com.yf.kp.model.TagihanTunai"/>
         <mapping class="com.yf.kp.model.LaporanAngsuran"/>
         <mapping class="com.yf.kp.model.LaporanTunai"/>
+        <mapping class="com.yf.kp.model.LaporanBulanan"/>
     </session-factory>
 </hibernate-configuration>

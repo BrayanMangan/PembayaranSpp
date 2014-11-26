@@ -18,6 +18,8 @@ package com.yf.kp.service.impl;
 
 import com.yf.kp.model.Bulanan;
 import com.yf.kp.service.BulananService;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
 
 /**
  *
@@ -27,6 +29,23 @@ public class BulananServiceImpl extends AbstractServiceImpl<Bulanan> implements 
 
     public BulananServiceImpl() {
         super(Bulanan.class);
+    }
+
+    @Override
+    public Bulanan findOneByName(String nama) {
+        Bulanan bulanan = new Bulanan();
+        connect();
+        try {
+            Query q = manager().createQuery("SELECT B FROM Bulanan B WHERE B.nama = :nama");
+            q.setParameter("nama", nama);
+            bulanan = (Bulanan) q.uniqueResult();
+            commit();
+        } catch (HibernateException e) {
+            rollback();
+        } finally {
+            close();
+        }
+        return bulanan;
     }
 
 }

@@ -22,6 +22,7 @@ import com.yf.kp.model.Bulanan;
 import com.yf.kp.model.Kelas;
 import com.yf.kp.model.Siswa;
 import com.yf.kp.model.TagihanAngsuran;
+import com.yf.kp.model.TagihanBulanan;
 import com.yf.kp.model.TagihanTunai;
 import com.yf.kp.model.Tunai;
 import com.yf.kp.service.AngsuranService;
@@ -29,6 +30,7 @@ import com.yf.kp.service.BulananService;
 import com.yf.kp.service.KelasService;
 import com.yf.kp.service.SiswaService;
 import com.yf.kp.service.TagihanAngsuranService;
+import com.yf.kp.service.TagihanBulananService;
 import com.yf.kp.service.TagihanTunaiService;
 import com.yf.kp.service.TunaiService;
 import com.yf.kp.service.impl.AngsuranServiceImpl;
@@ -36,6 +38,7 @@ import com.yf.kp.service.impl.BulananServiceImpl;
 import com.yf.kp.service.impl.KelasServiceImpl;
 import com.yf.kp.service.impl.SiswaServiceImpl;
 import com.yf.kp.service.impl.TagihanAngsuranServiceImpl;
+import com.yf.kp.service.impl.TagihanBulananServiceImpl;
 import com.yf.kp.service.impl.TagihanTunaiServiceImpl;
 import com.yf.kp.service.impl.TunaiServiceImpl;
 import java.util.ArrayList;
@@ -187,6 +190,59 @@ public class FrameBiling extends javax.swing.JInternalFrame {
         dblTunai.setModel(dblModel);
     }
 
+    private void pilihBulananNamaTagihan() {
+        dblModel = new DefaultDoubleListModel<>(String.class);
+        if (!"Pilih".equals(cmbBulananNamaTagihan.getSelectedItem().toString())) {
+            siswaService = new SiswaServiceImpl();
+            listSiswa = siswaService.findAllByKelas(cmbKelas.getSelectedItem().toString());
+            for (Siswa siswa : listSiswa) {
+                dblModel.add(siswa.getNama());
+            }
+            dblBulanan.setModel(dblModel);
+        } else {
+            dblModel.removeAllSourceValues();
+            dblModel.removeAllTargetValues();
+            dblBulanan.setModel(dblModel);
+        }
+    }
+
+    private void simpanBulanan() {
+        Collection<String> values = dblModel.getValues();
+        siswaService = new SiswaServiceImpl();
+        TagihanBulananService tagihanBulananService = new TagihanBulananServiceImpl();
+        BulananService bulananService = new BulananServiceImpl();
+        Bulanan bulanan = bulananService.findOneByName(cmbBulananNamaTagihan.getSelectedItem().toString());
+        List<String> listNamaSiswa = new ArrayList<>();
+        for (String nama : values) {
+            Siswa siswa = siswaService.findOneByName(nama);
+            TagihanBulanan tagihanBulanan = new TagihanBulanan();
+            tagihanBulanan.setNis(siswa.getNis());
+            tagihanBulanan.setNama(siswa.getNama());
+            tagihanBulanan.setKelas(cmbKelas.getSelectedItem().toString());
+            tagihanBulanan.setNamaTagihan(cmbBulananNamaTagihan.getSelectedItem().toString());
+            tagihanBulanan.setKategori("Bulanan");
+            tagihanBulanan.setJumlah(bulanan.getJumlah());
+            tagihanBulanan.setJanuari(!bulanan.isJanuari());
+            tagihanBulanan.setFebruari(!bulanan.isFebruari());
+            tagihanBulanan.setMaret(!bulanan.isMaret());
+            tagihanBulanan.setApril(!bulanan.isApril());
+            tagihanBulanan.setMei(!bulanan.isMei());
+            tagihanBulanan.setJuni(!bulanan.isJuni());
+            tagihanBulanan.setJuli(!bulanan.isJuli());
+            tagihanBulanan.setAgustus(!bulanan.isAgustus());
+            tagihanBulanan.setSeptember(!bulanan.isSeptember());
+            tagihanBulanan.setOktober(!bulanan.isOktober());
+            tagihanBulanan.setNovember(!bulanan.isNovember());
+            tagihanBulanan.setDesember(!bulanan.isDesember());
+            for (String namaSiswa : values) {
+                listNamaSiswa.add(namaSiswa);
+            }
+            tagihanBulananService.saveBatch(tagihanBulanan, listNamaSiswa);
+        }
+        dblModel.removeAllTargetValues();
+        dblBulanan.setModel(dblModel);
+    }
+
     /**
      * Creates new form FrameBiling
      */
@@ -326,6 +382,12 @@ public class FrameBiling extends javax.swing.JInternalFrame {
 
         jLabel4.setText("Pilih Nama Tagihan");
 
+        cmbBulananNamaTagihan.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbBulananNamaTagihanItemStateChanged(evt);
+            }
+        });
+
         jButton3.setText("Keluar");
         jButton3.setPreferredSize(new java.awt.Dimension(100, 30));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -336,6 +398,11 @@ public class FrameBiling extends javax.swing.JInternalFrame {
 
         jButton4.setText("Simpan");
         jButton4.setPreferredSize(new java.awt.Dimension(100, 30));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelBulananLayout = new javax.swing.GroupLayout(panelBulanan);
         panelBulanan.setLayout(panelBulananLayout);
@@ -509,6 +576,14 @@ public class FrameBiling extends javax.swing.JInternalFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         simpanTunai();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void cmbBulananNamaTagihanItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbBulananNamaTagihanItemStateChanged
+        pilihBulananNamaTagihan();
+    }//GEN-LAST:event_cmbBulananNamaTagihanItemStateChanged
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        simpanBulanan();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

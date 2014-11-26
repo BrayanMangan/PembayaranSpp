@@ -14,23 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.yf.kp.service;
+package com.yf.kp.service.impl;
 
-import com.yf.kp.model.TagihanBulanan;
-import java.util.List;
+import com.yf.kp.model.LaporanBulanan;
+import com.yf.kp.service.LaporanBulananService;
 
 /**
  *
  * @author anonymous
  */
-public interface TagihanBulananService extends AbstractService<TagihanBulanan> {
+public class LaporanBulananServiceImpl extends AbstractServiceImpl<LaporanBulanan> implements LaporanBulananService {
 
-    public void saveBatch(TagihanBulanan tagihanBulanan, List<String> listNamaSiswa);
-
-    public List<TagihanBulanan> findAllByNis(String nis);
-
-    public List<TagihanBulanan> findAllByNama(String nama);
-
-    public TagihanBulanan findOneByNisAndNamaTagihan(String nis, String namaTagihan);
+    public LaporanBulananServiceImpl() {
+        super(LaporanBulanan.class);
+    }
 
 }
