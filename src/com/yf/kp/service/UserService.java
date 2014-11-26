@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.yf.kp.service;
 
 import com.yf.kp.model.User;
@@ -24,5 +23,10 @@ import com.yf.kp.model.User;
  * @author khasdul
  */
 public interface UserService extends AbstractService<User> {
-    public User login(String username, String password);
+    
+    public void updateAdmin(Long id, String password);
+
+    public User login(String username, String password, Boolean asAdmin);
+    
+    public void changePassword(String oldPwd, String newPwd);
 }

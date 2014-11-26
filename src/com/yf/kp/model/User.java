@@ -30,6 +30,7 @@ public class User extends BaseModel {
 
     private String username;
     private String password;
+    private Boolean asAdmin;
 
     public String getUsername() {
         return username;
@@ -45,6 +46,14 @@ public class User extends BaseModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean isAsAdmin() {
+        return asAdmin;
+    }
+
+    public void setAsAdmin(Boolean asAdmin) {
+        this.asAdmin = asAdmin;
     }
 
 }

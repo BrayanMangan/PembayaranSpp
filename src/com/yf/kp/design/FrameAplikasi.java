@@ -4,6 +4,8 @@ import com.yf.kp.design.billing.FrameBiling;
 import com.yf.kp.design.jenispembayaran.FrameJenisPembayaran;
 import com.yf.kp.design.siswa.FrameSiswa;
 import com.yf.kp.design.kelas.FrameKelas;
+import com.yf.kp.design.login.DialogLogIn;
+import com.yf.kp.design.login.GantiPassword;
 import com.yf.kp.design.transaksi.FrameTransaksi;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -19,7 +21,6 @@ public class FrameAplikasi extends javax.swing.JFrame {
 
     private Dimension dimension;
     private Image image;
-    private Object desktopPaneCustom1;
 
     /**
      * Creates new form FrameAplikasi
@@ -29,6 +30,14 @@ public class FrameAplikasi extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         fullScreen();
         setIcon();
+    }
+
+    public Boolean loginAsAdmin(Boolean login) {
+        btnBiling.setEnabled(login);
+        btnDataSiswa.setEnabled(login);
+        btnJenisPembayaran.setEnabled(login);
+        btnKelas.setEnabled(login);
+        return false;
     }
 
     private void fullScreen() {
@@ -54,13 +63,15 @@ public class FrameAplikasi extends javax.swing.JFrame {
         customDesktopPane1 = new com.yf.kp.template.CustomDesktopPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jButtonMenuDataSiswa = new javax.swing.JButton();
-        jButtonMenuKelas = new javax.swing.JButton();
+        btnDataSiswa = new javax.swing.JButton();
+        btnKelas = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
-        jButtonMenuJenisPembayaran = new javax.swing.JButton();
-        jButtonMenuBilingPembayaran = new javax.swing.JButton();
+        btnJenisPembayaran = new javax.swing.JButton();
+        btnBiling = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMTransaksi = new javax.swing.JMenu();
         jmiTransaksi = new javax.swing.JMenuItem();
@@ -72,7 +83,6 @@ public class FrameAplikasi extends javax.swing.JFrame {
         setTitle("Aplikasi Pembayaran");
         setMaximumSize(new java.awt.Dimension(1280, 720));
         setMinimumSize(new java.awt.Dimension(1280, 720));
-        setPreferredSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -85,26 +95,26 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(149, 186, 211));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jButtonMenuDataSiswa.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jButtonMenuDataSiswa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/list_users.gif"))); // NOI18N
-        jButtonMenuDataSiswa.setText("DATA SISWA");
-        jButtonMenuDataSiswa.setToolTipText("Untuk membuat nama kelas");
-        jButtonMenuDataSiswa.setBorder(null);
-        jButtonMenuDataSiswa.setPreferredSize(new java.awt.Dimension(150, 70));
-        jButtonMenuDataSiswa.addActionListener(new java.awt.event.ActionListener() {
+        btnDataSiswa.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        btnDataSiswa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/list_users.gif"))); // NOI18N
+        btnDataSiswa.setText("DATA SISWA");
+        btnDataSiswa.setToolTipText("Untuk membuat nama kelas");
+        btnDataSiswa.setBorder(null);
+        btnDataSiswa.setPreferredSize(new java.awt.Dimension(150, 70));
+        btnDataSiswa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonMenuDataSiswaActionPerformed(evt);
+                btnDataSiswaActionPerformed(evt);
             }
         });
 
-        jButtonMenuKelas.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jButtonMenuKelas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/icon_home.gif"))); // NOI18N
-        jButtonMenuKelas.setText("KELAS");
-        jButtonMenuKelas.setToolTipText("Untuk membuat nama kelas");
-        jButtonMenuKelas.setPreferredSize(new java.awt.Dimension(150, 70));
-        jButtonMenuKelas.addActionListener(new java.awt.event.ActionListener() {
+        btnKelas.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        btnKelas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/icon_home.gif"))); // NOI18N
+        btnKelas.setText("KELAS");
+        btnKelas.setToolTipText("Untuk membuat nama kelas");
+        btnKelas.setPreferredSize(new java.awt.Dimension(150, 70));
+        btnKelas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonMenuKelasActionPerformed(evt);
+                btnKelasActionPerformed(evt);
             }
         });
 
@@ -113,16 +123,16 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jButtonMenuDataSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDataSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonMenuKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jButtonMenuDataSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jButtonMenuKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnDataSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane1.addTab("KESISWAAN", jPanel1);
@@ -130,25 +140,25 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jPanel5.setBackground(new java.awt.Color(149, 186, 211));
         jPanel5.setPreferredSize(new java.awt.Dimension(700, 65));
 
-        jButtonMenuJenisPembayaran.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jButtonMenuJenisPembayaran.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/icon_network.gif"))); // NOI18N
-        jButtonMenuJenisPembayaran.setText("JENIS PEMBAYARAN");
-        jButtonMenuJenisPembayaran.setToolTipText("Untuk membuat jenis/nama pembayaran");
-        jButtonMenuJenisPembayaran.setPreferredSize(new java.awt.Dimension(180, 68));
-        jButtonMenuJenisPembayaran.addActionListener(new java.awt.event.ActionListener() {
+        btnJenisPembayaran.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        btnJenisPembayaran.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/icon_network.gif"))); // NOI18N
+        btnJenisPembayaran.setText("JENIS PEMBAYARAN");
+        btnJenisPembayaran.setToolTipText("Untuk membuat jenis/nama pembayaran");
+        btnJenisPembayaran.setPreferredSize(new java.awt.Dimension(180, 68));
+        btnJenisPembayaran.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonMenuJenisPembayaranActionPerformed(evt);
+                btnJenisPembayaranActionPerformed(evt);
             }
         });
 
-        jButtonMenuBilingPembayaran.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jButtonMenuBilingPembayaran.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/list_comments.gif"))); // NOI18N
-        jButtonMenuBilingPembayaran.setText("BILING PEMBAYARAN");
-        jButtonMenuBilingPembayaran.setToolTipText("Membagi siswa dalam jenis pembayaran");
-        jButtonMenuBilingPembayaran.setPreferredSize(new java.awt.Dimension(180, 68));
-        jButtonMenuBilingPembayaran.addActionListener(new java.awt.event.ActionListener() {
+        btnBiling.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        btnBiling.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/list_comments.gif"))); // NOI18N
+        btnBiling.setText("BILING PEMBAYARAN");
+        btnBiling.setToolTipText("Membagi siswa dalam jenis pembayaran");
+        btnBiling.setPreferredSize(new java.awt.Dimension(180, 68));
+        btnBiling.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonMenuBilingPembayaranActionPerformed(evt);
+                btnBilingActionPerformed(evt);
             }
         });
 
@@ -157,16 +167,16 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jButtonMenuJenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnJenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonMenuBilingPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnBiling, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(326, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jButtonMenuBilingPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jButtonMenuJenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnBiling, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnJenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane1.addTab("PEMBAYARAN", jPanel5);
@@ -175,6 +185,22 @@ public class FrameAplikasi extends javax.swing.JFrame {
         jTabbedPane1.setBounds(0, 0, 700, 100);
 
         jMenu1.setText("File");
+
+        jMenuItem2.setText("Ganti Password");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuItem3.setText("Logout");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/yf/kp/images/action_stop.gif"))); // NOI18N
         jMenuItem1.setText("Exit");
@@ -228,12 +254,12 @@ public class FrameAplikasi extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(customDesktopPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE)
+            .addComponent(customDesktopPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(customDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE)
+                .addComponent(customDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -247,34 +273,34 @@ public class FrameAplikasi extends javax.swing.JFrame {
         ft.setVisible(true);
     }//GEN-LAST:event_jmiTransaksiActionPerformed
 
-    private void jButtonMenuDataSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuDataSiswaActionPerformed
+    private void btnDataSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDataSiswaActionPerformed
         FrameSiswa fs = new FrameSiswa();
         fs.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
         customDesktopPane1.add(fs);
         fs.setVisible(true);
-    }//GEN-LAST:event_jButtonMenuDataSiswaActionPerformed
+    }//GEN-LAST:event_btnDataSiswaActionPerformed
 
-    private void jButtonMenuKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuKelasActionPerformed
+    private void btnKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKelasActionPerformed
         // TODO add your handling code here:
         FrameKelas fk = new FrameKelas();
         fk.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
         customDesktopPane1.add(fk);
         fk.setVisible(true);
-    }//GEN-LAST:event_jButtonMenuKelasActionPerformed
+    }//GEN-LAST:event_btnKelasActionPerformed
 
-    private void jButtonMenuJenisPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuJenisPembayaranActionPerformed
+    private void btnJenisPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJenisPembayaranActionPerformed
         FrameJenisPembayaran frameJenisPembayaran = new FrameJenisPembayaran();
         frameJenisPembayaran.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
         customDesktopPane1.add(frameJenisPembayaran);
         frameJenisPembayaran.setVisible(true);
-    }//GEN-LAST:event_jButtonMenuJenisPembayaranActionPerformed
+    }//GEN-LAST:event_btnJenisPembayaranActionPerformed
 
-    private void jButtonMenuBilingPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuBilingPembayaranActionPerformed
+    private void btnBilingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBilingActionPerformed
         FrameBiling Fb = new FrameBiling();
         Fb.setBounds(0, 0, customDesktopPane1.getWidth(), customDesktopPane1.getHeight());
         customDesktopPane1.add(Fb);
         Fb.setVisible(true);
-    }//GEN-LAST:event_jButtonMenuBilingPembayaranActionPerformed
+    }//GEN-LAST:event_btnBilingActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if (JOptionPane.showConfirmDialog(null, "Are You Sure to Exit?", "Exit Application", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -296,21 +322,33 @@ public class FrameAplikasi extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jmiPembayaranActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        GantiPassword dialog = new GantiPassword(this, true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        this.dispose();
+        new DialogLogIn(this, true).setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     /**
      * @param args the command line argument
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBiling;
+    private javax.swing.JButton btnDataSiswa;
+    private javax.swing.JButton btnJenisPembayaran;
+    private javax.swing.JButton btnKelas;
     private com.yf.kp.template.CustomDesktopPane customDesktopPane1;
-    private javax.swing.JButton jButtonMenuBilingPembayaran;
-    private javax.swing.JButton jButtonMenuDataSiswa;
-    private javax.swing.JButton jButtonMenuJenisPembayaran;
-    private javax.swing.JButton jButtonMenuKelas;
     private javax.swing.JMenu jMLaporan;
     private javax.swing.JMenu jMTransaksi;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JTabbedPane jTabbedPane1;

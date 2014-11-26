@@ -18,6 +18,7 @@ package com.yf.kp.service.impl;
 
 import com.yf.kp.model.User;
 import com.yf.kp.service.UserService;
+import javax.swing.JOptionPane;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 
@@ -32,15 +33,18 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
     }
 
     @Override
-    public User login(String username, String password) {
+    public User login(String username, String password, Boolean asAdmin) {
         User user = new User();
         connect();
         try {
-            Query q = manager().createQuery("SELECT u FROM User u WHERE u.username = :username AND u.password = :password");
+            Query q = manager().createQuery("SELECT u FROM User u WHERE u.username = :username AND u.password = :password AND u.asAdmin =:asAdmin");
             q.setParameter("username", username);
             q.setParameter("password", password);
+            q.setParameter("asAdmin", asAdmin);
             user = (User) q.uniqueResult();
+            commit();
         } catch (HibernateException e) {
+            JOptionPane.showMessageDialog(null, "And tidak memiliki hak akses");
             rollback();
         } finally {
             close();
@@ -48,4 +52,39 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
         return user;
     }
 
+    @Override
+    public void changePassword(String oldPwd, String newPwd) {
+        connect();
+        try {
+            Query q = manager().createQuery("SELECT u FROM User u WHERE u.password = :oldPassword");
+            q.setParameter("oldPassword", oldPwd);
+            User user = (User) q.uniqueResult();
+            commit();
+            if (user.getPassword().equals(newPwd)) {
+                updateAdmin(user.getId(), newPwd);
+            } else {
+                JOptionPane.showMessageDialog(null, "Password Anda tidak valid");
+            }
+        } catch (HibernateException e) {
+            rollback();
+        } finally {
+            close();
+        }
+    }
+
+    @Override
+    public void updateAdmin(Long id, String password) {
+        connect();
+        try {
+            Query q = manager().createQuery("UPDATE User AS U SET U.password =:password WHERE U.id = :id");
+            q.setParameter("id", id);
+            q.setParameter("password", password);
+            q.executeUpdate();
+            commit();
+        } catch (HibernateException e) {
+            rollback();
+        } finally {
+            close();
+        }
+    }
 }

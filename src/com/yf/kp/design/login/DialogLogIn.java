@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.yf.kp.login;
+package com.yf.kp.design.login;
 
 import com.yf.kp.design.FrameAplikasi;
 import com.yf.kp.model.User;
 import com.yf.kp.service.UserService;
 import com.yf.kp.service.impl.UserServiceImpl;
-import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
+import org.hibernate.HibernateException;
 
 /**
  *
@@ -55,9 +55,11 @@ public class DialogLogIn extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtUsername = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         pswd = new javax.swing.JPasswordField();
+        txtUsername = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        cmbLoginSebagai = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         btnLogIn = new javax.swing.JButton();
@@ -73,13 +75,22 @@ public class DialogLogIn extends javax.swing.JDialog {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("LogIn Applikasi Pembayaran Siswa SMP NEGERI 1 Punggelan"));
 
-        jLabel1.setText("Usser Name");
-
-        txtUsername.setPreferredSize(new java.awt.Dimension(10, 30));
+        jLabel1.setText("User Name");
 
         jLabel2.setText("Password");
 
         pswd.setPreferredSize(new java.awt.Dimension(100, 30));
+
+        txtUsername.setPreferredSize(new java.awt.Dimension(10, 30));
+
+        jLabel4.setText("Login Sebagai:");
+
+        cmbLoginSebagai.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Staf TU", "Kepala TU" }));
+        cmbLoginSebagai.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbLoginSebagaiItemStateChanged(evt);
+            }
+        });
 
         jButton1.setText("Keluar");
         jButton1.setPreferredSize(new java.awt.Dimension(75, 30));
@@ -88,6 +99,7 @@ public class DialogLogIn extends javax.swing.JDialog {
                 jButton1ActionPerformed(evt);
             }
         });
+        jPanel3.add(jButton1);
 
         btnLogIn.setText("LogIn");
         btnLogIn.setPreferredSize(new java.awt.Dimension(75, 30));
@@ -96,24 +108,7 @@ public class DialogLogIn extends javax.swing.JDialog {
                 btnLogInActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(79, 79, 79)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnLogIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(btnLogIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        jPanel3.add(btnLogIn);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -122,19 +117,33 @@ public class DialogLogIn extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 245, Short.MAX_VALUE)
-                    .addComponent(txtUsername, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pswd, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cmbLoginSebagai, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pswd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtUsername, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(cmbLoginSebagai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -142,9 +151,9 @@ public class DialogLogIn extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(pswd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -159,7 +168,7 @@ public class DialogLogIn extends javax.swing.JDialog {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(50, 50, 50)
+                .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -175,7 +184,7 @@ public class DialogLogIn extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -196,22 +205,44 @@ public void login() {
         String password = new String(pswd.getPassword());
         userService = new UserServiceImpl();
         try {
-            User user = userService.login(username, password);
-            if (username.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Username Kosong!");
-            } else if (password.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Password Kosong!");
-            } else if (!username.equals(user.getUsername()) && (!password.equals(user.getPassword()))) {
-                JOptionPane.showMessageDialog(this, "Username atau Password Tidak Valid!");
-            } else {
-                if (username.equals(user.getUsername()) && (password.equals(user.getPassword()))) {
-                    FrameAplikasi FA = new FrameAplikasi();
-                    this.dispose();
-                    FA.setVisible(true);
+            if (cmbLoginSebagai.getSelectedItem() == "Kepala TU") {
+                User user = userService.login(username, password, true);
+                if (username.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Username Kosong!");
+                } else if (password.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Password Kosong!");
+                } else if (!username.equals(user.getUsername()) && (!password.equals(user.getPassword()))) {
+                    JOptionPane.showMessageDialog(this, "Username atau Password Tidak Valid!");
+                } else {
+                    if (username.equals(user.getUsername()) && (password.equals(user.getPassword()))) {
+                        FrameAplikasi FA = new FrameAplikasi();
+                        FA.loginAsAdmin(true);
+                        this.dispose();
+                        FA.setVisible(true);
+                    }
                 }
-            }
-        } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, "Aplikasi Belum Terkoneksi Ke Database\n" + e.getMessage(), "Peringatan", JOptionPane.ERROR_MESSAGE);
+            } else if (cmbLoginSebagai.getSelectedItem() == "Staf TU") {
+                User user = userService.login(username, password, false);
+                if (username.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Username Kosong!");
+                } else if (password.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Password Kosong!");
+                } else if (!username.equals(user.getUsername()) && (!password.equals(user.getPassword()))) {
+                    JOptionPane.showMessageDialog(this, "Username atau Password Tidak Valid!");
+                } else {
+                    if (username.equals(user.getUsername()) && (password.equals(user.getPassword()))) {
+                        FrameAplikasi FA = new FrameAplikasi();
+                        FA.loginAsAdmin(false);
+                        this.dispose();
+                        FA.setVisible(true);
+                    }
+                }
+            } 
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Anda tidak memiliki hak akses");
+        } catch (HibernateException ex) {
+            JOptionPane.showMessageDialog(this, "Aplikasi Belum Terkoneksi Ke Database\n" + ex.getMessage(), "Peringatan", JOptionPane.ERROR_MESSAGE);
+
         }
     }
 
@@ -233,15 +264,21 @@ public void login() {
         keluar();
     }//GEN-LAST:event_formWindowClosing
 
+    private void cmbLoginSebagaiItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbLoginSebagaiItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbLoginSebagaiItemStateChanged
+
     /**
      * @param args the command line arguments
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogIn;
+    private javax.swing.JComboBox cmbLoginSebagai;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

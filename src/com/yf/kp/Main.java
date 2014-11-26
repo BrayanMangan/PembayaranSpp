@@ -1,7 +1,7 @@
 package com.yf.kp;
 
 import com.alee.laf.WebLookAndFeel;
-import com.yf.kp.design.FrameAplikasi;
+import com.yf.kp.design.login.DialogLogIn;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -21,7 +21,7 @@ public class Main {
             public void run() {
                 try {
                     UIManager.setLookAndFeel(new WebLookAndFeel());
-                    new FrameAplikasi().setVisible(true);
+                    new DialogLogIn(null, true).setVisible(true);
                 } catch (UnsupportedLookAndFeelException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
